@@ -267,7 +267,7 @@
         }
         to {
           opacity: 1;
-          transform: translateY(0) scale(1);
+          transform: none;
         }
       }
 
@@ -1245,6 +1245,10 @@
 
           if (!escaped) {
             initialRect = noBtn.getBoundingClientRect();
+
+            // Move the button to <body> so `position: fixed` is relative to the viewport
+            // (avoids disappearing due to transformed/filtered ancestors).
+            document.body.appendChild(noBtn);
             noBtn.style.position = "fixed";
             noBtn.style.left = initialRect.left + "px";
             noBtn.style.top = initialRect.top + "px";
@@ -1256,18 +1260,17 @@
           const yesRect = yesBtn.getBoundingClientRect();
           const noRect = noBtn.getBoundingClientRect();
 
+          const minX = padding;
+          const maxX = Math.max(minX, window.innerWidth - noRect.width - padding);
+          const minY = padding;
+          const maxY = Math.max(minY, window.innerHeight - noRect.height - padding);
+
           let x, y, safe;
           let attempts = 0;
 
           do {
-            x =
-              Math.random() *
-                (window.innerWidth - noRect.width - padding * 2) +
-              padding;
-            y =
-              Math.random() *
-                (window.innerHeight - noRect.height - padding * 2) +
-              padding;
+            x = minX + Math.random() * (maxX - minX);
+            y = minY + Math.random() * (maxY - minY);
 
             safe =
               x + noRect.width < yesRect.left ||
