@@ -32,7 +32,7 @@ echo ""
 # Check if we have uncommitted changes
 if ! git diff-index --quiet HEAD --; then
     echo "📝 Staging changes..."
-    git add valentine.html
+    git add index.html
     git commit -m "Valentine proposal template"
 fi
 
