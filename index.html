@@ -349,6 +349,15 @@
         animation: bloom 2400ms ease-in-out infinite;
       }
 
+      .roseEmoji {
+        font-size: 58px;
+        line-height: 1;
+        filter: drop-shadow(0 18px 26px rgba(180, 0, 58, 0.16));
+        transform-origin: 50% 60%;
+        animation: bloom 2400ms ease-in-out infinite;
+        user-select: none;
+      }
+
       .roseMark .ring {
         position: absolute;
         inset: -10px;
@@ -921,7 +930,7 @@
         .roseBurst,
         .roseBtn,
         .roseMark .ring,
-        .roseMark svg {
+        .roseEmoji {
           animation: none !important;
         }
 
@@ -947,84 +956,7 @@
 
         <div class="roseMark" aria-hidden="true">
           <div class="ring"></div>
-          <svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path
-              d="M32 10c-9 0-16 7-16 16 0 6.2 3.1 11.4 7.1 15.5 3.1 3.1 4.2 6.4 4.2 10.1v1.3h9.4v-1.3c0-3.7 1.1-7 4.2-10.1C44.9 37.4 48 32.2 48 26c0-9-7-16-16-16z"
-              fill="url(#petalG1)"
-            />
-            <path
-              d="M23 27c2.7-3 6-4.5 9-4.5s6.3 1.5 9 4.5"
-              stroke="rgba(255,255,255,0.62)"
-              stroke-width="1.2"
-              stroke-linecap="round"
-            />
-            <path
-              d="M32 20c-5 0-9 4-9 9 0 4.2 2.4 7 5 9.4"
-              stroke="rgba(255,255,255,0.55)"
-              stroke-width="1.2"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-            />
-            <path
-              d="M32 20c5 0 9 4 9 9 0 4.2-2.4 7-5 9.4"
-              stroke="rgba(255,255,255,0.55)"
-              stroke-width="1.2"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-            />
-            <path
-              d="M32 42v12"
-              stroke="url(#stemG1)"
-              stroke-width="2.6"
-              stroke-linecap="round"
-            />
-            <path
-              d="M31.5 50c-9 .7-15 6.2-16.2 13.2 8-1.1 14.7-6.2 16.2-13.2z"
-              fill="url(#leafG1)"
-              opacity="0.95"
-            />
-            <path
-              d="M32.5 50c9 .7 15 6.2 16.2 13.2-8-1.1-14.7-6.2-16.2-13.2z"
-              fill="url(#leafG1)"
-              opacity="0.9"
-            />
-            <defs>
-              <linearGradient
-                id="petalG1"
-                x1="16"
-                y1="10"
-                x2="50"
-                y2="48"
-                gradientUnits="userSpaceOnUse"
-              >
-                <stop stop-color="#b4003a" />
-                <stop offset="0.55" stop-color="#ff2f7a" />
-                <stop offset="1" stop-color="#ffb347" />
-              </linearGradient>
-              <linearGradient
-                id="stemG1"
-                x1="32"
-                y1="42"
-                x2="32"
-                y2="56"
-                gradientUnits="userSpaceOnUse"
-              >
-                <stop stop-color="#53b86a" />
-                <stop offset="1" stop-color="#2f7d4a" />
-              </linearGradient>
-              <linearGradient
-                id="leafG1"
-                x1="15"
-                y1="50"
-                x2="50"
-                y2="64"
-                gradientUnits="userSpaceOnUse"
-              >
-                <stop stop-color="#53b86a" />
-                <stop offset="1" stop-color="#2f7d4a" />
-              </linearGradient>
-            </defs>
-          </svg>
+          <div class="roseEmoji" aria-hidden="true">🌹</div>
         </div>
 
         <div class="forLine">For <span class="script" id="toName">Sana</span></div>
