@@ -589,6 +589,19 @@
         filter: brightness(1.03);
       }
 
+      #noBtn {
+        cursor: not-allowed;
+        -webkit-tap-highlight-color: transparent;
+        touch-action: none;
+        will-change: left, top;
+      }
+
+      #noBtn:hover,
+      #noBtn:active {
+        transform: none;
+        filter: none;
+      }
+
       .note {
         position: relative;
         margin: 18px 0 0;
@@ -1066,7 +1079,6 @@
             <button id="replayBtn" class="btn secondary mini" type="button">
               Petal shower
             </button>
-            <button id="closeBtn" class="btn secondary mini" type="button">Back</button>
           </div>
         </div>
 
@@ -1099,7 +1111,6 @@
         const yesBtn = document.getElementById("yesBtn");
         const toast = document.getElementById("toast");
         const modal = document.getElementById("modal");
-        const closeBtn = document.getElementById("closeBtn");
         const replayBtn = document.getElementById("replayBtn");
         const toName = document.getElementById("toName");
         const fromName = document.getElementById("fromName");
@@ -1110,6 +1121,7 @@
         let initialRect = null;
         let toastTimer = null;
         let noEscapes = 0;
+        let lastEscapeAt = 0;
 
         function showToast(message) {
           toast.textContent = message;
@@ -1227,6 +1239,10 @@
         }
 
         function escapeNoButton() {
+          const now = Date.now();
+          if (now - lastEscapeAt < 140) return;
+          lastEscapeAt = now;
+
           if (!escaped) {
             initialRect = noBtn.getBoundingClientRect();
             noBtn.style.position = "fixed";
@@ -1319,7 +1335,7 @@
         function openModal() {
           modal.classList.add("open");
           modal.setAttribute("aria-hidden", "false");
-          const focusTarget = closeBtn || replayBtn;
+          const focusTarget = replayBtn;
           if (focusTarget) focusTarget.focus({ preventScroll: true });
         }
 
@@ -1342,10 +1358,13 @@
           card.style.setProperty("--my", "18%");
         });
 
-        // No button behavior
-        noBtn.addEventListener("pointerenter", () => {
-          escapeNoButton();
-        });
+        function maybeEscapeFromPoint(clientX, clientY, threshold) {
+          const rect = noBtn.getBoundingClientRect();
+          const cx = rect.left + rect.width / 2;
+          const cy = rect.top + rect.height / 2;
+          const distance = Math.hypot(clientX - cx, clientY - cy);
+          if (distance < threshold) escapeNoButton();
+        }
 
         noBtn.addEventListener("touchstart", (e) => {
           e.preventDefault();
@@ -1377,14 +1396,15 @@
           showToast("Almost. Try the other one.");
         });
 
-        // Desktop: flee when cursor is near
-        document.addEventListener("mousemove", (e) => {
-          const rect = noBtn.getBoundingClientRect();
-          const cx = rect.left + rect.width / 2;
-          const cy = rect.top + rect.height / 2;
+        // Flee when pointer is near (mouse + touch)
+        document.addEventListener("pointermove", (e) => {
+          const t = e.pointerType === "touch" ? 160 : 120;
+          maybeEscapeFromPoint(e.clientX, e.clientY, t);
+        });
 
-          const distance = Math.hypot(e.clientX - cx, e.clientY - cy);
-          if (distance < 120) escapeNoButton();
+        document.addEventListener("pointerdown", (e) => {
+          if (e.pointerType !== "touch") return;
+          maybeEscapeFromPoint(e.clientX, e.clientY, 190);
         });
 
         window.addEventListener("resize", () => {
@@ -1399,7 +1419,6 @@
           openModal();
         });
 
-        if (closeBtn) closeBtn.addEventListener("click", closeModal);
         replayBtn.addEventListener("click", petalShower);
 
         modal.addEventListener("click", (e) => {
