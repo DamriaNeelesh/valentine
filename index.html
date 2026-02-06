@@ -1045,7 +1045,7 @@
           >
             🌹
           </button>
-          <button id="noBtn" class="btn ghost" type="button" aria-describedby="note">
+          <button id="noBtn" class="btn ghost" type="button">
             No
           </button>
         </div>
@@ -1368,11 +1368,13 @@
 
         noBtn.addEventListener("touchstart", (e) => {
           e.preventDefault();
+          e.stopPropagation();
           escapeNoButton();
         });
 
         noBtn.addEventListener("pointerdown", (e) => {
           e.preventDefault();
+          e.stopPropagation();
           escapeNoButton();
 
           noEscapes++;
@@ -1388,6 +1390,7 @@
 
         noBtn.addEventListener("click", (e) => {
           e.preventDefault();
+          e.stopPropagation();
           escapeNoButton();
         });
 
