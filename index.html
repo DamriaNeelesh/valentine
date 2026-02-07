@@ -1181,11 +1181,14 @@
         let noEscapes = 0;
         let lastEscapeAt = 0;
 
-        function showToast(message) {
+        function showToast(message, durationMs = 1200) {
           toast.textContent = message;
           toast.classList.add("show");
           window.clearTimeout(toastTimer);
-          toastTimer = window.setTimeout(() => toast.classList.remove("show"), 1200);
+          toastTimer = window.setTimeout(
+            () => toast.classList.remove("show"),
+            durationMs
+          );
         }
 
         function normalizeName(value, fallback) {
@@ -1460,17 +1463,43 @@
             musicFadeRaf = requestAnimationFrame(tick);
           }
 
-          function tryStartMusic() {
-            if (!bgMusic) return;
-            if (bgMusic.dataset.error) return;
-            if (!bgMusic.paused) return;
+          let musicPrompted = false;
+
+          function showMusicPrompt() {
+            if (musicPrompted) return;
+            musicPrompted = true;
+            showToast("Tap once to start the music", 2600);
+          }
+
+          function tryStartMusic({ silent = false } = {}) {
+            if (!bgMusic) return Promise.resolve(false);
+            if (bgMusic.dataset.error) return Promise.resolve(false);
+            if (!bgMusic.paused) return Promise.resolve(true);
 
             const p = bgMusic.play();
-            if (p && typeof p.catch === "function") {
-              p.catch(() => {
-                // Autoplay might be blocked; we try again on the next tap.
-              });
+            if (!p || typeof p.then !== "function") {
+              return Promise.resolve(!bgMusic.paused);
             }
+
+            return p.then(() => true).catch(() => {
+              if (!silent) showMusicPrompt();
+              return false;
+            });
+          }
+
+          let musicArmed = false;
+          function armMusicOnFirstInteraction() {
+            if (musicArmed) return;
+            musicArmed = true;
+
+            const handler = () => {
+              tryStartMusic({ silent: true });
+            };
+
+            document.addEventListener("pointerdown", handler, { once: true });
+            document.addEventListener("touchstart", handler, { once: true });
+            document.addEventListener("mousedown", handler, { once: true });
+            document.addEventListener("keydown", handler, { once: true });
           }
 
           function softShower() {
@@ -1493,6 +1522,8 @@
 
           if (bgMusic) {
             bgMusic.volume = 0.2;
+            bgMusic.currentTime = 0;
+            bgMusic.load();
             bgMusic.addEventListener(
               "error",
               () => {
@@ -1656,6 +1687,18 @@
           });
 
           renderStep();
+
+          // Start music as soon as Day 2 loads (best-effort; some browsers require a tap).
+          tryStartMusic().then((ok) => {
+            if (!ok) armMusicOnFirstInteraction();
+          });
+
+          document.addEventListener("visibilitychange", () => {
+            if (document.visibilityState !== "visible") return;
+            if (!bgMusic || bgMusic.dataset.error) return;
+            if (!bgMusic.paused) return;
+            tryStartMusic({ silent: true });
+          });
         }
 
         // Card spotlight follows cursor
