@@ -1143,8 +1143,8 @@
       </div>
     </div>
 
-    <audio id="bgMusic" preload="auto" loop>
-      <source src="quiet-forever.mp3" type="audio/mpeg" />
+    <audio id="bgMusic" preload="auto" loop playsinline>
+      <source src="audio2.mpeg" type="audio/mpeg" />
     </audio>
 
     <script>
@@ -1578,6 +1578,9 @@
                 `;
               }
               return `
+                <div class="photoFrame" aria-hidden="true">
+                  <img src="day2.jpeg" alt="Cute puppies" class="photo" />
+                </div>
                 <p class="screenText finalText">
                   Jawab toh hum dono jaante hain,<br />
                   par fir bhi kehna zaroori tha.<br /><br />
