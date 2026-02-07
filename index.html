@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Happy Rose Day</title>
+    <title>Valentine</title>
 
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -900,6 +900,118 @@
         transform: translateY(-1px);
       }
 
+      /* Day 2 (Propose Day): Quiet Forever */
+      body[data-day="2"] {
+        --bg-1: #f3d7df;
+        --bg-2: #f7efe9;
+        --bg-3: #f0f6f5;
+
+        --ink: #231217;
+        --muted: rgba(35, 18, 23, 0.66);
+
+        --card: rgba(255, 255, 255, 0.9);
+        --shadow: 0 50px 140px rgba(35, 18, 23, 0.18);
+
+        --accent-1: #7b1230;
+        --accent-2: #d8476f;
+        --accent-3: #d7a16a;
+
+        --leaf-1: #2b6f55;
+        --leaf-2: #5aa985;
+      }
+
+      body[data-day="2"] .ribbon {
+        background: rgba(123, 18, 48, 0.06);
+        border-color: rgba(123, 18, 48, 0.14);
+      }
+
+      .flow {
+        position: relative;
+        margin: 12px 0 16px;
+      }
+
+      .flowSwap {
+        transition: opacity 220ms ease, transform 220ms ease;
+      }
+
+      .flowSwap.fading {
+        opacity: 0;
+        transform: translateY(6px);
+      }
+
+      .screenText {
+        position: relative;
+        margin: 10px auto 22px;
+        max-width: 44ch;
+        text-align: center;
+        font-family: "Fraunces", ui-serif, Georgia, serif;
+        font-weight: 600;
+        font-size: clamp(18px, 4vw, 24px);
+        line-height: 1.35;
+        letter-spacing: -0.01em;
+        color: rgba(42, 12, 26, 0.86);
+      }
+
+      body[data-day="2"] .screenText {
+        color: rgba(35, 18, 23, 0.88);
+      }
+
+      .roseChoices {
+        position: relative;
+        display: flex;
+        justify-content: center;
+        gap: 14px;
+        flex-wrap: wrap;
+        margin: 6px 0 14px;
+      }
+
+      .roseChoiceBtn {
+        width: 78px;
+        height: 78px;
+        padding: 0;
+        display: grid;
+        place-items: center;
+        border-radius: 999px;
+        font-size: 34px;
+        line-height: 1;
+      }
+
+      .ask {
+        position: relative;
+        margin: 14px auto 18px;
+        text-align: center;
+        font-family: "Fraunces", ui-serif, Georgia, serif;
+        font-weight: 700;
+        font-size: clamp(30px, 7vw, 44px);
+        letter-spacing: -0.02em;
+        background: linear-gradient(
+          135deg,
+          var(--accent-1),
+          var(--accent-2),
+          var(--accent-3)
+        );
+        -webkit-background-clip: text;
+        background-clip: text;
+        color: transparent;
+        text-shadow: 0 18px 60px rgba(180, 0, 58, 0.12);
+      }
+
+      body[data-day="2"] .ask {
+        text-shadow: 0 18px 60px rgba(123, 18, 48, 0.1);
+      }
+
+      .finalText {
+        margin-bottom: 10px;
+      }
+
+      .accentLine {
+        color: rgba(180, 0, 58, 0.92);
+      }
+
+      body[data-day="2"] .accentLine {
+        color: rgba(123, 18, 48, 0.92);
+      }
+
       @media (max-width: 440px) {
         .card {
           padding: 48px 22px 34px;
@@ -1031,6 +1143,10 @@
       </div>
     </div>
 
+    <audio id="bgMusic" preload="auto" loop>
+      <source src="quiet-forever.mp3" type="audio/mpeg" />
+    </audio>
+
     <script>
       (() => {
         const DEFAULT_TO = "Sana";
@@ -1044,10 +1160,20 @@
         const toast = document.getElementById("toast");
         const modal = document.getElementById("modal");
         const replayBtn = document.getElementById("replayBtn");
+        const bgMusic = document.getElementById("bgMusic");
         const toName = document.getElementById("toName");
         const fromName = document.getElementById("fromName");
         const modalTo = document.getElementById("modalTo");
         const modalFrom = document.getElementById("modalFrom");
+
+        const params = new URLSearchParams(window.location.search);
+        const day = (() => {
+          const raw = (params.get("day") || params.get("d") || "").trim();
+          if (raw === "2") return 2;
+          return 1;
+        })();
+
+        document.body.dataset.day = String(day);
 
         let escaped = false;
         let initialRect = null;
@@ -1075,16 +1201,22 @@
         }
 
         function applyPersonalization() {
-          const params = new URLSearchParams(window.location.search);
           const to = normalizeName(params.get("to") || params.get("name"), DEFAULT_TO);
           const from = normalizeName(params.get("from"), DEFAULT_FROM);
 
-          toName.textContent = to;
-          modalTo.textContent = to;
-          fromName.textContent = from;
-          modalFrom.textContent = from;
+          const pairs = [
+            ["toName", to],
+            ["modalTo", to],
+            ["fromName", from],
+            ["modalFrom", from],
+          ];
+          for (const [id, value] of pairs) {
+            const el = document.getElementById(id);
+            if (el) el.textContent = value;
+          }
 
-          document.title = `Happy Rose Day, ${to}`;
+          document.title =
+            day === 2 ? `Happy Propose Day, ${to}` : `Happy Rose Day, ${to}`;
         }
 
         function spawnPetals() {
@@ -1280,6 +1412,249 @@
           yesBtn.focus({ preventScroll: true });
         }
 
+        function initDay2() {
+          if (!card) return;
+
+          const ROSE = "🌹";
+
+          card.setAttribute("aria-label", "Propose Day card");
+          card.innerHTML = `
+            <div class="ribbon"><i aria-hidden="true"></i> Day 2 - Propose Day</div>
+
+            <div class="roseMark" aria-hidden="true">
+              <div class="ring"></div>
+              <div class="roseEmoji" aria-hidden="true">${ROSE}</div>
+            </div>
+
+            <div class="forLine">For <span class="script" id="toName">${DEFAULT_TO}</span></div>
+
+            <div class="flow flowSwap" id="flow"></div>
+
+            <div class="signature">From <strong id="fromName">${DEFAULT_FROM}</strong></div>
+          `;
+
+          let musicFadeRaf = 0;
+
+          function fadeMusicTo(targetVolume, durationMs) {
+            if (!bgMusic) return;
+
+            const start = bgMusic.volume || 0;
+            const end = Math.max(0, Math.min(1, targetVolume));
+
+            if (!durationMs || durationMs < 16) {
+              bgMusic.volume = end;
+              return;
+            }
+
+            const startAt = performance.now();
+            if (musicFadeRaf) window.cancelAnimationFrame(musicFadeRaf);
+
+            function tick(now) {
+              const t = Math.min(1, (now - startAt) / durationMs);
+              const eased =
+                t < 0.5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 2) / 2;
+              bgMusic.volume = start + (end - start) * eased;
+              if (t < 1) musicFadeRaf = requestAnimationFrame(tick);
+            }
+
+            musicFadeRaf = requestAnimationFrame(tick);
+          }
+
+          function tryStartMusic() {
+            if (!bgMusic) return;
+            if (bgMusic.dataset.error) return;
+            if (!bgMusic.paused) return;
+
+            const p = bgMusic.play();
+            if (p && typeof p.catch === "function") {
+              p.catch(() => {
+                // Autoplay might be blocked; we try again on the next tap.
+              });
+            }
+          }
+
+          function softShower() {
+            if (typeof confetti !== "function") return;
+            if (prefersReducedMotion()) return;
+
+            const colors = ["#7b1230", "#d8476f", "#f3d7df", "#f7efe9", "#d7a16a"];
+            confetti({
+              particleCount: 52,
+              spread: 92,
+              startVelocity: 34,
+              ticks: 240,
+              gravity: 1.06,
+              scalar: 0.98,
+              colors,
+              shapes: ["circle"],
+              origin: { x: 0.5, y: 0.62 },
+            });
+          }
+
+          if (bgMusic) {
+            bgMusic.volume = 0.2;
+            bgMusic.addEventListener(
+              "error",
+              () => {
+                bgMusic.dataset.error = "1";
+              },
+              { once: true }
+            );
+          }
+
+          const flow = document.getElementById("flow");
+          if (!flow) return;
+
+          const MUSIC_LEVELS = {
+            1: { volume: 0.2, fade: 500 },
+            2: { volume: 0.21, fade: 600 },
+            3: { volume: 0.24, fade: 700 },
+            4: { volume: 0.27, fade: 900 },
+            5: { volume: 0.3, fade: 900 },
+            6: { volume: 0.2, fade: 5200 },
+          };
+
+          let step = 1;
+          let roseSolved = false;
+
+          function applyMusicForStep(s) {
+            const cfg = MUSIC_LEVELS[s] || MUSIC_LEVELS[1];
+            fadeMusicTo(cfg.volume, cfg.fade);
+          }
+
+          function renderStep() {
+            const html = (() => {
+              if (step === 1) {
+                return `
+                  <p class="screenText">Main koi badi speech nahi dene aaya hoon.</p>
+                  <div class="buttons">
+                    <button class="btn primary" type="button" data-action="next">Aage</button>
+                  </div>
+                `;
+              }
+              if (step === 2) {
+                return `
+                  <p class="screenText">
+                    Tum jaanti ho...<br />
+                    tum mere liye excitement se zyada sukoon ho.
+                  </p>
+                  <div class="buttons">
+                    <button class="btn primary" type="button" data-action="next">Continue</button>
+                  </div>
+                `;
+              }
+              if (step === 3) {
+                return `
+                  <p class="screenText">Ek rose choose karo.</p>
+                  <div class="roseChoices">
+                    <button class="btn primary roseChoiceBtn" type="button" data-action="rose" data-rose="1" aria-label="Rose 1">${ROSE}</button>
+                    <button class="btn primary roseChoiceBtn" type="button" data-action="rose" data-rose="2" aria-label="Rose 2">${ROSE}</button>
+                    <button class="btn primary roseChoiceBtn" type="button" data-action="rose" data-rose="3" aria-label="Rose 3">${ROSE}</button>
+                  </div>
+                `;
+              }
+              if (step === 4) {
+                return `
+                  <p class="screenText">
+                    Kuch cheezein zabardasti nahi hoti.<br />
+                    Bas naturally unlock hoti hain.
+                  </p>
+                  <div class="buttons">
+                    <button class="btn primary" type="button" data-action="unlock">Unlock</button>
+                  </div>
+                `;
+              }
+              if (step === 5) {
+                return `
+                  <p class="screenText">
+                    Main tumse koi perfect future ka vaada nahi karta,<br />
+                    bas har imperfect din tumhare saath jeena chahta hoon.
+                  </p>
+                  <div class="ask">Marry me.</div>
+                  <div class="buttons">
+                    <button class="btn secondary" type="button" data-action="yes">Haan</button>
+                    <button class="btn primary" type="button" data-action="yes">Hamesha</button>
+                  </div>
+                `;
+              }
+              return `
+                <p class="screenText finalText">
+                  Jawab toh hum dono jaante hain,<br />
+                  par fir bhi kehna zaroori tha.<br /><br />
+                  Tumhara sukoon,<br />
+                  meri zimmedari hai.<br /><br />
+                  <span class="accentLine">Aaj bhi. Kal bhi. Hamesha.</span>
+                </p>
+              `;
+            })();
+
+            flow.innerHTML = html;
+            applyMusicForStep(step);
+
+            const primary = flow.querySelector(".btn.primary");
+            if (primary) primary.focus({ preventScroll: true });
+          }
+
+          function go(next) {
+            if (next === step) return;
+            step = next;
+            flow.classList.add("fading");
+            window.setTimeout(() => {
+              renderStep();
+              requestAnimationFrame(() => flow.classList.remove("fading"));
+            }, 170);
+          }
+
+          flow.addEventListener("click", (e) => {
+            const btn = e.target.closest("button");
+            if (!btn) return;
+
+            tryStartMusic();
+
+            const action = btn.dataset.action || "";
+            if (action === "next") {
+              go(step + 1);
+              return;
+            }
+
+            if (action === "rose") {
+              const n = Number(btn.dataset.rose || "0");
+              if (n === 3) {
+                roseSolved = true;
+                const r = btn.getBoundingClientRect();
+                burstRosesAt(r.left + r.width / 2, r.top + r.height / 2);
+                go(4);
+              } else if (n === 2) {
+                showToast("Almost.");
+              } else {
+                showToast("Galat rose, phir try karo.");
+              }
+              return;
+            }
+
+            if (action === "unlock") {
+              if (!roseSolved) {
+                showToast("Pehle rose choose karo.");
+                go(3);
+                return;
+              }
+              const r = btn.getBoundingClientRect();
+              burstRosesAt(r.left + r.width / 2, r.top + r.height / 2);
+              go(5);
+              return;
+            }
+
+            if (action === "yes") {
+              const r = btn.getBoundingClientRect();
+              burstRosesAt(r.left + r.width / 2, r.top + r.height / 2);
+              softShower();
+              go(6);
+            }
+          });
+
+          renderStep();
+        }
+
         // Card spotlight follows cursor
         card.addEventListener("pointermove", (e) => {
           const r = card.getBoundingClientRect();
@@ -1292,6 +1667,14 @@
           card.style.setProperty("--mx", "50%");
           card.style.setProperty("--my", "18%");
         });
+
+        if (day === 2) {
+          initDay2();
+          applyPersonalization();
+          spawnPetals();
+          spawnRoses();
+          return;
+        }
 
         function maybeEscapeFromPoint(clientX, clientY, threshold) {
           const rect = noBtn.getBoundingClientRect();
