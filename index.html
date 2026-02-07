@@ -949,7 +949,8 @@
 
       /* Day 2 final step: show only the final content (no top badge/header). */
       body[data-day="2"] #card.day2Final {
-        padding-top: 44px;
+        padding-top: 34px;
+        padding-bottom: 28px;
       }
 
       body[data-day="2"] #card.day2Final .ribbon,
@@ -964,8 +965,15 @@
       }
 
       body[data-day="2"] #card.day2Final .photoFrame {
-        width: min(280px, 82vw);
-        margin-bottom: 18px;
+        width: min(230px, 74vw);
+        aspect-ratio: 3 / 4;
+        margin-bottom: 14px;
+      }
+
+      body[data-day="2"] #card.day2Final .finalText {
+        margin: 6px auto 0;
+        font-size: clamp(16px, 3.7vw, 22px);
+        line-height: 1.45;
       }
 
       /* Day 2: use the illustration as a badge (not a forced circle-crop) */
@@ -1950,17 +1958,10 @@
             }
 
             if (action === "rose") {
-              const n = Number(btn.dataset.rose || "0");
-              if (n === 3) {
-                roseSolved = true;
-                const r = btn.getBoundingClientRect();
-                burstRosesAt(r.left + r.width / 2, r.top + r.height / 2);
-                go(4);
-              } else if (n === 2) {
-                showToast("Almost.");
-              } else {
-                showToast("Galat rose, phir try karo.");
-              }
+              roseSolved = true;
+              const r = btn.getBoundingClientRect();
+              burstRosesAt(r.left + r.width / 2, r.top + r.height / 2);
+              go(4);
               return;
             }
 
