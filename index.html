@@ -127,6 +127,25 @@
         will-change: transform, opacity;
       }
 
+      .ringFloat {
+        --x: 50vw;
+        --size: 24px;
+        --dur: 20s;
+        --delay: 0s;
+        --drift: 0px;
+
+        position: absolute;
+        left: var(--x);
+        bottom: -18vh;
+        font-size: var(--size);
+        opacity: 0.14;
+        filter: drop-shadow(0 16px 26px rgba(215, 161, 106, 0.22));
+        transform: translate3d(0, 0, 0) rotate(-6deg);
+        animation: ringUp var(--dur) linear infinite;
+        animation-delay: var(--delay);
+        will-change: transform, opacity;
+      }
+
       @keyframes roseUp {
         0% {
           transform: translate3d(0, 0, 0) rotate(-10deg);
@@ -137,6 +156,20 @@
         }
         100% {
           transform: translate3d(var(--drift), -130vh, 0) rotate(22deg);
+          opacity: 0;
+        }
+      }
+
+      @keyframes ringUp {
+        0% {
+          transform: translate3d(0, 0, 0) rotate(-6deg);
+          opacity: 0;
+        }
+        12% {
+          opacity: 0.18;
+        }
+        100% {
+          transform: translate3d(var(--drift), -130vh, 0) rotate(16deg);
           opacity: 0;
         }
       }
@@ -1274,6 +1307,7 @@
       @media (prefers-reduced-motion: reduce) {
         .petal,
         .roseFloat,
+        .ringFloat,
         .roseBurst,
         .roseBtn,
         .roseMark .ring,
