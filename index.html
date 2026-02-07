@@ -157,6 +157,10 @@
         z-index: 140;
       }
 
+      .ringBurst {
+        filter: drop-shadow(0 16px 26px rgba(215, 161, 106, 0.28));
+      }
+
       @keyframes rosePop {
         0% {
           transform: translate(-50%, -50%) scale(0.3) rotate(-12deg);
@@ -1539,6 +1543,31 @@
           }
         }
 
+        function burstRingsAt(x, y) {
+          if (prefersReducedMotion()) return;
+
+          const count = 10;
+          for (let i = 0; i < count; i++) {
+            const el = document.createElement("div");
+            el.className = "roseBurst ringBurst";
+            el.textContent = "💍";
+
+            el.style.left = `${x}px`;
+            el.style.top = `${y}px`;
+
+            const dx = (Math.random() * 320 - 160).toFixed(1) + "px";
+            const dy = (-(110 + Math.random() * 210)).toFixed(1) + "px";
+            el.style.setProperty("--dx", dx);
+            el.style.setProperty("--dy", dy);
+
+            el.style.fontSize = (20 + Math.random() * 16).toFixed(1) + "px";
+            el.style.animationDuration = (820 + Math.random() * 520).toFixed(0) + "ms";
+
+            document.body.appendChild(el);
+            el.addEventListener("animationend", () => el.remove(), { once: true });
+          }
+        }
+
         function escapeNoButton() {
           const now = Date.now();
           if (now - lastEscapeAt < 140) return;
@@ -1850,6 +1879,15 @@
 
           let step = 1;
           let roseSolved = false;
+          let roseAttempts = 0;
+          let roseOrder = [1, 2, 3];
+
+          function shuffleRoses() {
+            for (let i = roseOrder.length - 1; i > 0; i--) {
+              const j = Math.floor(Math.random() * (i + 1));
+              [roseOrder[i], roseOrder[j]] = [roseOrder[j], roseOrder[i]];
+            }
+          }
 
           function applyMusicForStep(s) {
             const cfg = MUSIC_LEVELS[s] || MUSIC_LEVELS[1];
@@ -1879,12 +1917,17 @@
                 `;
               }
               if (step === 3) {
+                // Start with a random layout so it feels like a "pick the right one" trick.
+                if (roseAttempts === 0) shuffleRoses();
                 return `
                   <p class="screenText">Ek rose choose karo.</p>
                   <div class="roseChoices">
-                    <button class="btn primary roseChoiceBtn" type="button" data-action="rose" data-rose="1" aria-label="Rose 1">${ROSE}</button>
-                    <button class="btn primary roseChoiceBtn" type="button" data-action="rose" data-rose="2" aria-label="Rose 2">${ROSE}</button>
-                    <button class="btn primary roseChoiceBtn" type="button" data-action="rose" data-rose="3" aria-label="Rose 3">${ROSE}</button>
+                    ${roseOrder
+                      .map(
+                        (n) =>
+                          `<button class="btn primary roseChoiceBtn" type="button" data-action="rose" data-rose="${n}" aria-label="Rose ${n}">${ROSE}</button>`
+                      )
+                      .join("")}
                   </div>
                 `;
               }
@@ -1958,6 +2001,16 @@
             }
 
             if (action === "rose") {
+              roseAttempts++;
+
+              // Trick: no matter which rose they click, success happens only on the 3rd try.
+              if (roseAttempts < 3) {
+                showToast(roseAttempts === 1 ? "Galat rose, phir try karo." : "Almost.");
+                shuffleRoses();
+                renderStep();
+                return;
+              }
+
               roseSolved = true;
               const r = btn.getBoundingClientRect();
               burstRosesAt(r.left + r.width / 2, r.top + r.height / 2);
@@ -1979,7 +2032,7 @@
 
             if (action === "yes") {
               const r = btn.getBoundingClientRect();
-              burstRosesAt(r.left + r.width / 2, r.top + r.height / 2);
+              burstRingsAt(r.left + r.width / 2, r.top + r.height / 2);
               softShower();
               go(6);
             }
