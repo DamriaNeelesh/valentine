@@ -358,6 +358,19 @@
         user-select: none;
       }
 
+      .roseImg {
+        width: 62px;
+        height: 62px;
+        display: block;
+        object-fit: contain;
+        filter: drop-shadow(0 18px 26px rgba(180, 0, 58, 0.16));
+        transform-origin: 50% 60%;
+        animation: bloom 2400ms ease-in-out infinite;
+        user-select: none;
+        -webkit-user-drag: none;
+        pointer-events: none;
+      }
+
       .roseMark .ring {
         position: absolute;
         inset: -10px;
@@ -925,6 +938,21 @@
         border-color: rgba(123, 18, 48, 0.14);
       }
 
+      /* Make Day 2 content scroll safely on small screens/heights */
+      body[data-day="2"] .card {
+        max-height: calc(100vh - 64px);
+        max-height: calc(100svh - 64px);
+        overflow: auto;
+        overscroll-behavior: contain;
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: none; /* Firefox */
+      }
+
+      body[data-day="2"] .card::-webkit-scrollbar {
+        width: 0;
+        height: 0;
+      }
+
       .flow {
         position: relative;
         margin: 12px 0 16px;
@@ -1010,6 +1038,10 @@
 
       body[data-day="2"] .accentLine {
         color: rgba(123, 18, 48, 0.92);
+      }
+
+      body[data-day="2"] .photoFrame {
+        width: min(220px, 74vw);
       }
 
       @media (max-width: 440px) {
@@ -1426,7 +1458,7 @@
 
             <div class="roseMark" aria-hidden="true">
               <div class="ring"></div>
-              <div class="roseEmoji" aria-hidden="true">${ROSE}</div>
+              <img class="roseImg" src="image.png" alt="" />
             </div>
 
             <div class="forLine">For <span class="script" id="toName">${DEFAULT_TO}</span></div>
@@ -1521,7 +1553,8 @@
           }
 
           if (bgMusic) {
-            bgMusic.volume = 0.2;
+            bgMusic.muted = false;
+            bgMusic.volume = 1;
             bgMusic.currentTime = 0;
             bgMusic.load();
             bgMusic.addEventListener(
@@ -1537,12 +1570,12 @@
           if (!flow) return;
 
           const MUSIC_LEVELS = {
-            1: { volume: 0.2, fade: 500 },
-            2: { volume: 0.21, fade: 600 },
-            3: { volume: 0.24, fade: 700 },
-            4: { volume: 0.27, fade: 900 },
-            5: { volume: 0.3, fade: 900 },
-            6: { volume: 0.2, fade: 5200 },
+            1: { volume: 1, fade: 250 },
+            2: { volume: 1, fade: 250 },
+            3: { volume: 1, fade: 250 },
+            4: { volume: 1, fade: 250 },
+            5: { volume: 1, fade: 250 },
+            6: { volume: 1, fade: 250 },
           };
 
           let step = 1;
@@ -1559,7 +1592,7 @@
                 return `
                   <p class="screenText">Main koi badi speech nahi dene aaya hoon.</p>
                   <div class="buttons">
-                    <button class="btn primary" type="button" data-action="next">Aage</button>
+                    <button class="btn primary" type="button" data-action="next">Next</button>
                   </div>
                 `;
               }
