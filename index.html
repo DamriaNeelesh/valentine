@@ -947,6 +947,27 @@
         filter: drop-shadow(0 18px 26px rgba(123, 18, 48, 0.12));
       }
 
+      /* Day 2 final step: show only the final content (no top badge/header). */
+      body[data-day="2"] #card.day2Final {
+        padding-top: 44px;
+      }
+
+      body[data-day="2"] #card.day2Final .ribbon,
+      body[data-day="2"] #card.day2Final .roseMark,
+      body[data-day="2"] #card.day2Final .forLine,
+      body[data-day="2"] #card.day2Final .signature {
+        display: none;
+      }
+
+      body[data-day="2"] #card.day2Final .flow {
+        margin: 0;
+      }
+
+      body[data-day="2"] #card.day2Final .photoFrame {
+        width: min(280px, 82vw);
+        margin-bottom: 18px;
+      }
+
       /* Day 2: use the illustration as a badge (not a forced circle-crop) */
       body[data-day="2"] .roseMark {
         width: min(260px, 78vw);
@@ -1828,6 +1849,7 @@
           }
 
           function renderStep() {
+            card.classList.toggle("day2Final", step === 6);
             const html = (() => {
               if (step === 1) {
                 return `
