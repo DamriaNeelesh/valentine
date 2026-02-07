@@ -1552,6 +1552,38 @@
           }
         }
 
+        function spawnRings() {
+          if (prefersReducedMotion()) return;
+          if (!roses) return;
+
+          // Day 2: ring-only background, no petals/roses.
+          roses.innerHTML = "";
+          if (petals) petals.innerHTML = "";
+
+          const count = 18;
+          for (let i = 0; i < count; i++) {
+            const el = document.createElement("div");
+            el.className = "ringFloat";
+            el.textContent = "💍";
+
+            const size = 18 + Math.random() * 26;
+            const x = Math.random() * 100;
+            const dur = 16 + Math.random() * 18;
+            const delay = -Math.random() * dur;
+            const drift = (Math.random() * 240 - 120).toFixed(1) + "px";
+            const opacity = 0.09 + Math.random() * 0.18;
+
+            el.style.setProperty("--size", size.toFixed(1) + "px");
+            el.style.setProperty("--x", x.toFixed(2) + "vw");
+            el.style.setProperty("--dur", dur.toFixed(2) + "s");
+            el.style.setProperty("--delay", delay.toFixed(2) + "s");
+            el.style.setProperty("--drift", drift);
+            el.style.opacity = opacity.toFixed(3);
+
+            roses.appendChild(el);
+          }
+        }
+
         function burstRosesAt(x, y) {
           if (prefersReducedMotion()) return;
 
@@ -1715,7 +1747,7 @@
         function initDay2() {
           if (!card) return;
 
-          const ROSE = "🌹";
+          const RING = "💍";
 
           card.setAttribute("aria-label", "Propose Day card");
           card.innerHTML = `
@@ -1912,14 +1944,14 @@
           };
 
           let step = 1;
-          let roseSolved = false;
-          let roseAttempts = 0;
-          let roseOrder = [1, 2, 3];
+          let ringSolved = false;
+          let ringAttempts = 0;
+          let ringOrder = [1, 2, 3];
 
-          function shuffleRoses() {
-            for (let i = roseOrder.length - 1; i > 0; i--) {
+          function shuffleRings() {
+            for (let i = ringOrder.length - 1; i > 0; i--) {
               const j = Math.floor(Math.random() * (i + 1));
-              [roseOrder[i], roseOrder[j]] = [roseOrder[j], roseOrder[i]];
+              [ringOrder[i], ringOrder[j]] = [ringOrder[j], ringOrder[i]];
             }
           }
 
@@ -1952,14 +1984,14 @@
               }
               if (step === 3) {
                 // Start with a random layout so it feels like a "pick the right one" trick.
-                if (roseAttempts === 0) shuffleRoses();
+                if (ringAttempts === 0) shuffleRings();
                 return `
-                  <p class="screenText">Ek rose choose karo.</p>
+                  <p class="screenText">Ek ring choose karo.</p>
                   <div class="roseChoices">
-                    ${roseOrder
+                    ${ringOrder
                       .map(
                         (n) =>
-                          `<button class="btn primary roseChoiceBtn" type="button" data-action="rose" data-rose="${n}" aria-label="Rose ${n}">${ROSE}</button>`
+                          `<button class="btn primary roseChoiceBtn" type="button" data-action="ring" data-ring="${n}" aria-label="Ring ${n}">${RING}</button>`
                       )
                       .join("")}
                   </div>
@@ -2034,32 +2066,32 @@
               return;
             }
 
-            if (action === "rose") {
-              roseAttempts++;
+            if (action === "ring") {
+              ringAttempts++;
 
-              // Trick: no matter which rose they click, success happens only on the 3rd try.
-              if (roseAttempts < 3) {
-                showToast(roseAttempts === 1 ? "Galat rose, phir try karo." : "Almost.");
-                shuffleRoses();
+              // Trick: no matter which ring they click, success happens only on the 3rd try.
+              if (ringAttempts < 3) {
+                showToast(ringAttempts === 1 ? "Galat ring, phir try karo." : "Almost.");
+                shuffleRings();
                 renderStep();
                 return;
               }
 
-              roseSolved = true;
+              ringSolved = true;
               const r = btn.getBoundingClientRect();
-              burstRosesAt(r.left + r.width / 2, r.top + r.height / 2);
+              burstRingsAt(r.left + r.width / 2, r.top + r.height / 2);
               go(4);
               return;
             }
 
             if (action === "unlock") {
-              if (!roseSolved) {
-                showToast("Pehle rose choose karo.");
+              if (!ringSolved) {
+                showToast("Pehle ring choose karo.");
                 go(3);
                 return;
               }
               const r = btn.getBoundingClientRect();
-              burstRosesAt(r.left + r.width / 2, r.top + r.height / 2);
+              burstRingsAt(r.left + r.width / 2, r.top + r.height / 2);
               go(5);
               return;
             }
@@ -2091,8 +2123,7 @@
         if (day === 2) {
           initDay2();
           applyPersonalization();
-          spawnPetals();
-          spawnRoses();
+          spawnRings();
           return;
         }
 
