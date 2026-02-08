@@ -146,6 +146,25 @@
         will-change: transform, opacity;
       }
 
+      .chocoFloat {
+        --x: 50vw;
+        --size: 26px;
+        --dur: 20s;
+        --delay: 0s;
+        --drift: 0px;
+
+        position: absolute;
+        left: var(--x);
+        bottom: -18vh;
+        font-size: var(--size);
+        opacity: 0.15;
+        filter: drop-shadow(0 16px 26px rgba(90, 45, 28, 0.18));
+        transform: translate3d(0, 0, 0) rotate(-8deg);
+        animation: ringUp var(--dur) linear infinite;
+        animation-delay: var(--delay);
+        will-change: transform, opacity;
+      }
+
       @keyframes roseUp {
         0% {
           transform: translate3d(0, 0, 0) rotate(-10deg);
@@ -1280,6 +1299,116 @@
         }
       }
 
+      /* Day 3 (Chocolate Day): A Little Sweetness */
+      body[data-day="3"] {
+        --bg-1: #ffe3d6;
+        --bg-2: #fff1e8;
+        --bg-3: #fff8f4;
+
+        --ink: #2a1510;
+        --muted: rgba(42, 21, 16, 0.66);
+
+        --card: rgba(255, 255, 255, 0.9);
+        --shadow: 0 50px 140px rgba(42, 21, 16, 0.18);
+
+        --accent-1: #5a2d1c;
+        --accent-2: #d14b72;
+        --accent-3: #f0b24b;
+
+        --leaf-1: #2b6f55;
+        --leaf-2: #5aa985;
+      }
+
+      body[data-day="3"] .ribbon {
+        background: rgba(90, 45, 28, 0.06);
+        border-color: rgba(90, 45, 28, 0.14);
+      }
+
+      body[data-day="3"] .roseMark {
+        background: rgba(255, 255, 255, 0.72);
+        border: 1px solid rgba(90, 45, 28, 0.14);
+      }
+
+      body[data-day="3"] .roseMark .ring {
+        border-color: rgba(90, 45, 28, 0.24);
+      }
+
+      body[data-day="3"] .roseEmoji {
+        font-size: 54px;
+      }
+
+      /* Day 3 final step: show only the final content (no top badge/header). */
+      body[data-day="3"] #card.day3Final {
+        padding-top: 40px;
+        padding-bottom: 34px;
+      }
+
+      body[data-day="3"] #card.day3Final .ribbon,
+      body[data-day="3"] #card.day3Final .roseMark,
+      body[data-day="3"] #card.day3Final .forLine,
+      body[data-day="3"] #card.day3Final .signature {
+        display: none;
+      }
+
+      body[data-day="3"] #card.day3Final .flow {
+        margin: 0;
+      }
+
+      .sweetIcons {
+        position: relative;
+        margin: 6px 0 14px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 12px;
+        user-select: none;
+      }
+
+      .sweetIcons span {
+        font-size: 34px;
+        line-height: 1;
+        filter: drop-shadow(0 18px 26px rgba(90, 45, 28, 0.14));
+      }
+
+      .sweetChoco {
+        animation: sweetBob 1600ms ease-in-out infinite;
+      }
+
+      .sweetGift {
+        animation: sweetBob 1600ms ease-in-out infinite;
+        animation-delay: 200ms;
+      }
+
+      @keyframes sweetBob {
+        0%,
+        100% {
+          transform: translateY(0) rotate(-2deg);
+        }
+        50% {
+          transform: translateY(-5px) rotate(2deg);
+        }
+      }
+
+      .sweetWish {
+        position: relative;
+        margin: 2px 0 0;
+        text-align: center;
+        font-family: "Fraunces", ui-serif, Georgia, serif;
+        font-weight: 700;
+        font-size: clamp(24px, 6vw, 38px);
+        letter-spacing: -0.02em;
+        background: linear-gradient(
+          135deg,
+          var(--accent-1),
+          var(--accent-2),
+          var(--accent-3)
+        );
+        -webkit-background-clip: text;
+        background-clip: text;
+        color: transparent;
+        text-shadow: 0 18px 60px rgba(90, 45, 28, 0.1);
+      }
+
       @media (max-width: 440px) {
         .card {
           padding: 48px 22px 34px;
@@ -1308,11 +1437,14 @@
         .petal,
         .roseFloat,
         .ringFloat,
+        .chocoFloat,
         .roseBurst,
         .roseBtn,
         .roseMark .ring,
         .roseEmoji,
         .roseImg,
+        .sweetChoco,
+        .sweetGift,
         .gateBtn,
         .gateBtn::before {
           animation: none !important;
@@ -1423,6 +1555,8 @@
       (() => {
         const DEFAULT_TO = "Sana";
         const DEFAULT_FROM = "Adil Khan";
+        const CHOCO = "\uD83C\uDF6B";
+        const GIFT = "\uD83D\uDC9D";
 
         const card = document.getElementById("card");
         const petals = document.getElementById("petals");
@@ -1441,7 +1575,8 @@
         const params = new URLSearchParams(window.location.search);
         const day = (() => {
           const raw = (params.get("day") || params.get("d") || "").trim();
-          if (raw === "2") return 2;
+          const n = Number.parseInt(raw, 10);
+          if (n === 2 || n === 3) return n;
           return 1;
         })();
 
@@ -1491,7 +1626,11 @@
           }
 
           document.title =
-            day === 2 ? `Happy Propose Day, ${to}` : `Happy Rose Day, ${to}`;
+            day === 3
+              ? `Happy Chocolate Day, ${to}`
+              : day === 2
+                ? `Happy Propose Day, ${to}`
+                : `Happy Rose Day, ${to}`;
         }
 
         function spawnPetals() {
@@ -1572,6 +1711,38 @@
             const delay = -Math.random() * dur;
             const drift = (Math.random() * 240 - 120).toFixed(1) + "px";
             const opacity = 0.09 + Math.random() * 0.18;
+
+            el.style.setProperty("--size", size.toFixed(1) + "px");
+            el.style.setProperty("--x", x.toFixed(2) + "vw");
+            el.style.setProperty("--dur", dur.toFixed(2) + "s");
+            el.style.setProperty("--delay", delay.toFixed(2) + "s");
+            el.style.setProperty("--drift", drift);
+            el.style.opacity = opacity.toFixed(3);
+
+            roses.appendChild(el);
+          }
+        }
+
+        function spawnChocolates() {
+          if (prefersReducedMotion()) return;
+          if (!roses) return;
+
+          // Day 3: chocolate-only background, no petals/roses.
+          roses.innerHTML = "";
+          if (petals) petals.innerHTML = "";
+
+          const count = 18;
+          for (let i = 0; i < count; i++) {
+            const el = document.createElement("div");
+            el.className = "chocoFloat";
+            el.textContent = CHOCO;
+
+            const size = 18 + Math.random() * 28;
+            const x = Math.random() * 100;
+            const dur = 16 + Math.random() * 18;
+            const delay = -Math.random() * dur;
+            const drift = (Math.random() * 240 - 120).toFixed(1) + "px";
+            const opacity = 0.09 + Math.random() * 0.2;
 
             el.style.setProperty("--size", size.toFixed(1) + "px");
             el.style.setProperty("--x", x.toFixed(2) + "vw");
@@ -2107,6 +2278,107 @@
           renderStep();
         }
 
+        function initDay3() {
+          if (!card) return;
+
+          card.setAttribute("aria-label", "Chocolate Day card");
+          card.innerHTML = `
+            <div class="ribbon"><i aria-hidden="true"></i> Day 3 - Chocolate Day</div>
+
+            <div class="roseMark" aria-hidden="true">
+              <div class="ring"></div>
+              <div class="roseEmoji" aria-hidden="true">${CHOCO}</div>
+            </div>
+
+            <div class="forLine">For <span class="script" id="toName">${DEFAULT_TO}</span></div>
+
+            <div class="flow flowSwap" id="flow"></div>
+
+            <div class="signature">From <strong id="fromName">${DEFAULT_FROM}</strong></div>
+          `;
+
+          const flow = document.getElementById("flow");
+          if (!flow) return;
+
+          let step = 1;
+
+          function renderStep() {
+            card.classList.toggle("day3Final", step === 4);
+
+            const html = (() => {
+              if (step === 1) {
+                return `
+                  <p class="screenText">Chocolate Day pe log chocolates dete hain...</p>
+                  <div class="buttons">
+                    <button class="btn primary" type="button" data-action="next">Next</button>
+                  </div>
+                `;
+              }
+
+              if (step === 2) {
+                return `
+                  <p class="screenText">Par mujhe lagta hai sweetness sirf chocolate se nahi hoti.</p>
+                  <div class="buttons">
+                    <button class="btn primary" type="button" data-action="next">Continue</button>
+                  </div>
+                `;
+              }
+
+              if (step === 3) {
+                return `
+                  <p class="screenText">
+                    "Kabhi kisi ki ek smile,<br />
+                    poora din sweet bana deti hai."<br /><br />
+                    "Sach bolu to tum chocolate se jada sweet ho"
+                  </p>
+                  <div class="buttons">
+                    <button class="btn primary" type="button" data-action="next">Aage</button>
+                  </div>
+                `;
+              }
+
+              return `
+                <p class="screenText finalText">
+                  Aaj chocolate nahi de paaya,<br />
+                  par tumhara hona hi meri favourite sweetness hai.
+                </p>
+                <div class="sweetIcons" aria-hidden="true">
+                  <span class="sweetChoco">${CHOCO}</span>
+                  <span class="sweetGift">${GIFT}</span>
+                </div>
+                <div class="sweetWish">Happy Chocolate Day.</div>
+              `;
+            })();
+
+            flow.innerHTML = html;
+
+            const primary = flow.querySelector(".btn.primary");
+            if (primary) primary.focus({ preventScroll: true });
+          }
+
+          function go(next) {
+            const n = Math.max(1, Math.min(4, next));
+            if (n === step) return;
+
+            step = n;
+            flow.classList.add("fading");
+            window.setTimeout(() => {
+              renderStep();
+              requestAnimationFrame(() => flow.classList.remove("fading"));
+            }, 170);
+          }
+
+          flow.addEventListener("click", (e) => {
+            const btn = e.target.closest("button");
+            if (!btn) return;
+
+            const action = btn.dataset.action || "";
+            if (action === "next") go(step + 1);
+          });
+
+          renderStep();
+        }
+
         // Card spotlight follows cursor
         card.addEventListener("pointermove", (e) => {
           const r = card.getBoundingClientRect();
@@ -2124,6 +2396,13 @@
           initDay2();
           applyPersonalization();
           spawnRings();
+          return;
+        }
+
+        if (day === 3) {
+          initDay3();
+          applyPersonalization();
+          spawnChocolates();
           return;
         }
 
