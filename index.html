@@ -1343,6 +1343,25 @@
         padding-bottom: 34px;
       }
 
+      body[data-day="3"] #card.day3Intro {
+        padding-top: 44px;
+        padding-bottom: 44px;
+      }
+
+      body[data-day="3"] #card.day3Intro .ribbon,
+      body[data-day="3"] #card.day3Intro .roseMark,
+      body[data-day="3"] #card.day3Intro .forLine,
+      body[data-day="3"] #card.day3Intro .signature {
+        display: none;
+      }
+
+      body[data-day="3"] #card.day3Intro .flow {
+        margin: 0;
+        min-height: min(360px, 52vh);
+        display: grid;
+        place-items: center;
+      }
+
       body[data-day="3"] #card.day3Final .ribbon,
       body[data-day="3"] #card.day3Final .roseMark,
       body[data-day="3"] #card.day3Final .forLine,
@@ -1407,6 +1426,98 @@
         background-clip: text;
         color: transparent;
         text-shadow: 0 18px 60px rgba(90, 45, 28, 0.1);
+      }
+
+      body[data-day="3"] .gateStack {
+        position: relative;
+        display: grid;
+        place-items: center;
+        gap: 14px;
+        text-align: center;
+        margin: 2px 0 0;
+      }
+
+      body[data-day="3"] .gateBtn {
+        position: relative;
+        width: min(208px, 72vw);
+        aspect-ratio: 1;
+        border-radius: 999px;
+        border: 1px solid rgba(90, 45, 28, 0.18);
+        background: radial-gradient(
+            circle at 28% 24%,
+            rgba(255, 255, 255, 0.92),
+            rgba(255, 255, 255, 0.32) 40%,
+            rgba(90, 45, 28, 0.08) 74%
+          ),
+          linear-gradient(
+            135deg,
+            rgba(90, 45, 28, 0.14),
+            rgba(209, 75, 114, 0.12)
+          );
+        box-shadow: 0 30px 90px rgba(42, 21, 16, 0.14),
+          0 0 0 0 rgba(209, 75, 114, 0.16);
+        color: rgba(42, 21, 16, 0.92);
+        font-family: "Fraunces", ui-serif, Georgia, serif;
+        font-weight: 700;
+        font-size: clamp(16px, 4.8vw, 20px);
+        letter-spacing: -0.01em;
+        cursor: pointer;
+        display: grid;
+        place-items: center;
+        padding: 0 16px;
+        transition: transform 180ms ease, filter 180ms ease;
+        animation: gatePulse 1900ms ease-in-out infinite;
+        user-select: none;
+        touch-action: manipulation;
+      }
+
+      body[data-day="3"] .gateBtn::before {
+        content: "";
+        position: absolute;
+        inset: -12px;
+        border-radius: 999px;
+        border: 1px dashed rgba(90, 45, 28, 0.22);
+        opacity: 0.9;
+        animation: spin 9s linear infinite;
+      }
+
+      body[data-day="3"] .gateBtn::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        border-radius: 999px;
+        background: radial-gradient(
+          140px 90px at 30% 28%,
+          rgba(255, 255, 255, 0.55),
+          transparent 62%
+        );
+        pointer-events: none;
+        mix-blend-mode: screen;
+      }
+
+      body[data-day="3"] .gateBtn:hover {
+        filter: brightness(1.02);
+      }
+
+      body[data-day="3"] .gateBtn:active {
+        transform: scale(0.99);
+      }
+
+      body[data-day="3"] .gateBtn:focus-visible {
+        outline: 3px solid rgba(90, 45, 28, 0.24);
+        outline-offset: 7px;
+      }
+
+      body[data-day="3"] .gateText {
+        position: relative;
+        z-index: 1;
+      }
+
+      body[data-day="3"] .gateNote {
+        font-size: 12px;
+        color: rgba(42, 21, 16, 0.62);
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
       }
 
       @media (max-width: 440px) {
@@ -2281,6 +2392,46 @@
         function initDay3() {
           if (!card) return;
 
+          if (bgMusic) {
+            const src = bgMusic.querySelector("source");
+            if (src) src.src = "day3audio.mpeg";
+            bgMusic.muted = false;
+            bgMusic.volume = 1;
+            bgMusic.currentTime = 0;
+            bgMusic.load();
+            bgMusic.addEventListener(
+              "error",
+              () => {
+                bgMusic.dataset.error = "1";
+              },
+              { once: true }
+            );
+          }
+
+          let musicPrompted = false;
+
+          function showMusicPrompt() {
+            if (musicPrompted) return;
+            musicPrompted = true;
+            showToast("Tap to start the music", 2600);
+          }
+
+          function tryStartMusic({ silent = false } = {}) {
+            if (!bgMusic) return Promise.resolve(false);
+            if (bgMusic.dataset.error) return Promise.resolve(false);
+            if (!bgMusic.paused) return Promise.resolve(true);
+
+            const p = bgMusic.play();
+            if (!p || typeof p.then !== "function") {
+              return Promise.resolve(!bgMusic.paused);
+            }
+
+            return p.then(() => true).catch(() => {
+              if (!silent) showMusicPrompt();
+              return false;
+            });
+          }
+
           card.setAttribute("aria-label", "Chocolate Day card");
           card.innerHTML = `
             <div class="ribbon"><i aria-hidden="true"></i> Day 3 - Chocolate Day</div>
@@ -2300,12 +2451,23 @@
           const flow = document.getElementById("flow");
           if (!flow) return;
 
-          let step = 1;
+          let step = 0;
 
           function renderStep() {
+            card.classList.toggle("day3Intro", step === 0);
             card.classList.toggle("day3Final", step === 4);
 
             const html = (() => {
+              if (step === 0) {
+                return `
+                  <div class="gateStack">
+                    <button class="gateBtn" type="button" data-action="start">
+                      <span class="gateText">Ready for Day 3</span>
+                    </button>
+                    <div class="gateNote">Sound on</div>
+                  </div>
+                `;
+              }
               if (step === 1) {
                 return `
                   <p class="screenText">Chocolate Day pe log chocolates dete hain...</p>
@@ -2352,12 +2514,13 @@
 
             flow.innerHTML = html;
 
-            const primary = flow.querySelector(".btn.primary");
-            if (primary) primary.focus({ preventScroll: true });
+            const focusTarget =
+              step === 0 ? flow.querySelector(".gateBtn") : flow.querySelector(".btn.primary");
+            if (focusTarget) focusTarget.focus({ preventScroll: true });
           }
 
           function go(next) {
-            const n = Math.max(1, Math.min(4, next));
+            const n = Math.max(0, Math.min(4, next));
             if (n === step) return;
 
             step = n;
@@ -2373,6 +2536,28 @@
             if (!btn) return;
 
             const action = btn.dataset.action || "";
+            if (action === "start") {
+              btn.disabled = true;
+              if (!bgMusic || bgMusic.dataset.error) {
+                showToast("Audio not available", 2200);
+                go(1);
+                btn.disabled = false;
+                return;
+              }
+
+              tryStartMusic({ silent: true })
+                .then((ok) => {
+                  if (ok) go(1);
+                  else showToast("Tap again to start the music", 2200);
+                })
+                .finally(() => {
+                  btn.disabled = false;
+                });
+              return;
+            }
+
+            tryStartMusic();
+
             if (action === "next") go(step + 1);
           });
 
