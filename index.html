@@ -1324,17 +1324,20 @@
         border-color: rgba(90, 45, 28, 0.14);
       }
 
-      body[data-day="3"] .roseMark {
-        background: rgba(255, 255, 255, 0.72);
-        border: 1px solid rgba(90, 45, 28, 0.14);
+      body[data-day="3"] .chocoTop {
+        position: relative;
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        margin: 10px auto 14px;
       }
 
-      body[data-day="3"] .roseMark .ring {
-        border-color: rgba(90, 45, 28, 0.24);
-      }
-
-      body[data-day="3"] .roseEmoji {
-        font-size: 54px;
+      body[data-day="3"] .chocoEmoji {
+        font-size: clamp(54px, 10vw, 76px);
+        line-height: 1;
+        filter: drop-shadow(0 18px 26px rgba(90, 45, 28, 0.14));
+        transform: rotate(-8deg);
+        user-select: none;
       }
 
       /* Day 3 final step: show only the final content (no top badge/header). */
@@ -1349,7 +1352,7 @@
       }
 
       body[data-day="3"] #card.day3Intro .ribbon,
-      body[data-day="3"] #card.day3Intro .roseMark,
+      body[data-day="3"] #card.day3Intro .chocoTop,
       body[data-day="3"] #card.day3Intro .forLine,
       body[data-day="3"] #card.day3Intro .signature {
         display: none;
@@ -1362,8 +1365,14 @@
         place-items: center;
       }
 
+      /* Extra spacing so Day 3 header never visually collides with the flow text */
+      body[data-day="3"] .forLine {
+        margin-top: 4px;
+        margin-bottom: 12px;
+      }
+
       body[data-day="3"] #card.day3Final .ribbon,
-      body[data-day="3"] #card.day3Final .roseMark,
+      body[data-day="3"] #card.day3Final .chocoTop,
       body[data-day="3"] #card.day3Final .forLine,
       body[data-day="3"] #card.day3Final .signature {
         display: none;
@@ -2436,9 +2445,8 @@
           card.innerHTML = `
             <div class="ribbon"><i aria-hidden="true"></i> Day 3 - Chocolate Day</div>
 
-            <div class="roseMark" aria-hidden="true">
-              <div class="ring"></div>
-              <div class="roseEmoji" aria-hidden="true">${CHOCO}</div>
+            <div class="chocoTop" aria-hidden="true">
+              <div class="chocoEmoji" aria-hidden="true">${CHOCO}</div>
             </div>
 
             <div class="forLine">For <span class="script" id="toName">${DEFAULT_TO}</span></div>
