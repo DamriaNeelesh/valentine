@@ -165,6 +165,25 @@
         will-change: transform, opacity;
       }
 
+      .teddyFloat {
+        --x: 50vw;
+        --size: 30px;
+        --dur: 20s;
+        --delay: 0s;
+        --drift: 0px;
+
+        position: absolute;
+        left: var(--x);
+        bottom: -18vh;
+        font-size: var(--size);
+        opacity: 0.14;
+        filter: drop-shadow(0 16px 26px rgba(75, 45, 28, 0.16));
+        transform: translate3d(0, 0, 0) rotate(-6deg);
+        animation: ringUp var(--dur) linear infinite;
+        animation-delay: var(--delay);
+        will-change: transform, opacity;
+      }
+
       @keyframes roseUp {
         0% {
           transform: translate3d(0, 0, 0) rotate(-10deg);
@@ -1529,6 +1548,89 @@
         text-transform: uppercase;
       }
 
+      /* Day 4 (Teddy Day): Soft Comfort */
+      body[data-day="4"] {
+        --bg-1: #ffe6c9;
+        --bg-2: #fff2e1;
+        --bg-3: #fff9f1;
+
+        --ink: #2b1a10;
+        --muted: rgba(43, 26, 16, 0.66);
+
+        --card: rgba(255, 255, 255, 0.9);
+        --shadow: 0 50px 140px rgba(43, 26, 16, 0.18);
+
+        --accent-1: #7a4a2a;
+        --accent-2: #d68b5c;
+        --accent-3: #e85d87;
+
+        --leaf-1: #2b6f55;
+        --leaf-2: #5aa985;
+      }
+
+      body[data-day="4"] .ribbon {
+        background: rgba(122, 74, 42, 0.06);
+        border-color: rgba(122, 74, 42, 0.14);
+      }
+
+      body[data-day="4"] .teddyTop {
+        position: relative;
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        margin: 10px auto 14px;
+      }
+
+      body[data-day="4"] .teddyEmoji {
+        font-size: clamp(54px, 10vw, 76px);
+        line-height: 1;
+        filter: drop-shadow(0 18px 26px rgba(122, 74, 42, 0.14));
+        transform: rotate(-6deg);
+        user-select: none;
+      }
+
+      /* Day 4 final step: show only the final content (no top badge/header). */
+      body[data-day="4"] #card.day4Final {
+        padding-top: 40px;
+        padding-bottom: 34px;
+      }
+
+      body[data-day="4"] #card.day4Final .ribbon,
+      body[data-day="4"] #card.day4Final .teddyTop,
+      body[data-day="4"] #card.day4Final .forLine,
+      body[data-day="4"] #card.day4Final .signature {
+        display: none;
+      }
+
+      body[data-day="4"] #card.day4Final .flow {
+        margin: 0;
+      }
+
+      body[data-day="4"] .forLine {
+        margin-top: 4px;
+        margin-bottom: 12px;
+      }
+
+      .teddyWish {
+        position: relative;
+        margin: 4px 0 0;
+        text-align: center;
+        font-family: "Fraunces", ui-serif, Georgia, serif;
+        font-weight: 700;
+        font-size: clamp(22px, 5.6vw, 34px);
+        letter-spacing: -0.02em;
+        background: linear-gradient(
+          135deg,
+          var(--accent-1),
+          var(--accent-2),
+          var(--accent-3)
+        );
+        -webkit-background-clip: text;
+        background-clip: text;
+        color: transparent;
+        text-shadow: 0 18px 60px rgba(122, 74, 42, 0.1);
+      }
+
       @media (max-width: 440px) {
         .card {
           padding: 48px 22px 34px;
@@ -1558,6 +1660,7 @@
         .roseFloat,
         .ringFloat,
         .chocoFloat,
+        .teddyFloat,
         .roseBurst,
         .roseBtn,
         .roseMark .ring,
@@ -1677,6 +1780,7 @@
         const DEFAULT_FROM = "Adil Khan";
         const CHOCO = "\uD83C\uDF6B";
         const GIFT = "\uD83D\uDC9D";
+        const TEDDY = "\uD83E\uDDF8";
 
         const card = document.getElementById("card");
         const petals = document.getElementById("petals");
@@ -1696,7 +1800,7 @@
         const day = (() => {
           const raw = (params.get("day") || params.get("d") || "").trim();
           const n = Number.parseInt(raw, 10);
-          if (n === 2 || n === 3) return n;
+          if (n === 2 || n === 3 || n === 4) return n;
           return 1;
         })();
 
@@ -1746,11 +1850,13 @@
           }
 
           document.title =
-            day === 3
-              ? `Happy Chocolate Day, ${to}`
-              : day === 2
-                ? `Happy Propose Day, ${to}`
-                : `Happy Rose Day, ${to}`;
+            day === 4
+              ? `Happy Teddy Day, ${to}`
+              : day === 3
+                ? `Happy Chocolate Day, ${to}`
+                : day === 2
+                  ? `Happy Propose Day, ${to}`
+                  : `Happy Rose Day, ${to}`;
         }
 
         function spawnPetals() {
@@ -1856,6 +1962,38 @@
             const el = document.createElement("div");
             el.className = "chocoFloat";
             el.textContent = CHOCO;
+
+            const size = 18 + Math.random() * 28;
+            const x = Math.random() * 100;
+            const dur = 16 + Math.random() * 18;
+            const delay = -Math.random() * dur;
+            const drift = (Math.random() * 240 - 120).toFixed(1) + "px";
+            const opacity = 0.09 + Math.random() * 0.2;
+
+            el.style.setProperty("--size", size.toFixed(1) + "px");
+            el.style.setProperty("--x", x.toFixed(2) + "vw");
+            el.style.setProperty("--dur", dur.toFixed(2) + "s");
+            el.style.setProperty("--delay", delay.toFixed(2) + "s");
+            el.style.setProperty("--drift", drift);
+            el.style.opacity = opacity.toFixed(3);
+
+            roses.appendChild(el);
+          }
+        }
+
+        function spawnTeddies() {
+          if (prefersReducedMotion()) return;
+          if (!roses) return;
+
+          // Day 4: teddy-only background, no petals/roses.
+          roses.innerHTML = "";
+          if (petals) petals.innerHTML = "";
+
+          const count = 18;
+          for (let i = 0; i < count; i++) {
+            const el = document.createElement("div");
+            el.className = "teddyFloat";
+            el.textContent = TEDDY;
 
             const size = 18 + Math.random() * 28;
             const x = Math.random() * 100;
@@ -2572,6 +2710,86 @@
           renderStep();
         }
 
+        function initDay4() {
+          if (!card) return;
+
+          card.setAttribute("aria-label", "Teddy Day card");
+          card.innerHTML = `
+            <div class="ribbon"><i aria-hidden="true"></i> Day 4 - Teddy Day</div>
+
+            <div class="teddyTop" aria-hidden="true">
+              <div class="teddyEmoji" aria-hidden="true">${TEDDY}</div>
+            </div>
+
+            <div class="forLine">For <span class="script" id="toName">${DEFAULT_TO}</span></div>
+
+            <div class="flow flowSwap" id="flow"></div>
+
+            <div class="signature">From <strong id="fromName">${DEFAULT_FROM}</strong></div>
+          `;
+
+          const flow = document.getElementById("flow");
+          if (!flow) return;
+
+          let step = 1;
+
+          function renderStep() {
+            card.classList.toggle("day4Final", step === 3);
+
+            const html = (() => {
+              if (step === 1) {
+                return `
+                  <p class="screenText">Tumhe pata hai teddy kyun special hota hai?</p>
+                  <div class="buttons">
+                    <button class="btn primary" type="button" data-action="next">Next</button>
+                  </div>
+                `;
+              }
+
+              if (step === 2) {
+                return `
+                  <p class="screenText">Kyuki woh bina bole comfort deta hai.</p>
+                  <div class="buttons">
+                    <button class="btn primary" type="button" data-action="next">Continue</button>
+                  </div>
+                `;
+              }
+
+              return `
+                <p class="screenText finalText">Shayad isliye tum mujhe itni apni lagti ho.</p>
+                <div class="teddyWish">${TEDDY} Happy Teddy Day</div>
+              `;
+            })();
+
+            flow.innerHTML = html;
+
+            const primary = flow.querySelector(".btn.primary");
+            if (primary) primary.focus({ preventScroll: true });
+          }
+
+          function go(next) {
+            const n = Math.max(1, Math.min(3, next));
+            if (n === step) return;
+
+            step = n;
+            flow.classList.add("fading");
+            window.setTimeout(() => {
+              renderStep();
+              requestAnimationFrame(() => flow.classList.remove("fading"));
+            }, 170);
+          }
+
+          flow.addEventListener("click", (e) => {
+            const btn = e.target.closest("button");
+            if (!btn) return;
+
+            const action = btn.dataset.action || "";
+            if (action === "next") go(step + 1);
+          });
+
+          renderStep();
+        }
+
         // Card spotlight follows cursor
         card.addEventListener("pointermove", (e) => {
           const r = card.getBoundingClientRect();
@@ -2596,6 +2814,13 @@
           initDay3();
           applyPersonalization();
           spawnChocolates();
+          return;
+        }
+
+        if (day === 4) {
+          initDay4();
+          applyPersonalization();
+          spawnTeddies();
           return;
         }
 
