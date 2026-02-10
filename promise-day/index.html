@@ -1,0 +1,605 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Promise Day</title>
+
+    <!-- Font: clean sans (fade-in text only, no slide) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700&display=swap"
+      rel="stylesheet"
+    />
+
+    <style>
+      :root {
+        --ink: rgba(28, 28, 28, 0.92);
+        --muted: rgba(28, 28, 28, 0.72);
+        --max: 720px;
+        --pad: clamp(22px, 6vw, 56px);
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      html,
+      body {
+        height: 100%;
+      }
+
+      body {
+        margin: 0;
+        font-family: "Sora", ui-sans-serif, system-ui, -apple-system, "Segoe UI",
+          sans-serif;
+        color: var(--ink);
+        background: #ffffff;
+      }
+
+      main {
+        height: 100vh;
+        overflow-y: auto;
+        scroll-snap-type: y mandatory;
+        scroll-behavior: smooth;
+        -webkit-overflow-scrolling: touch;
+      }
+
+      section {
+        min-height: 100vh;
+        padding: var(--pad);
+        background: var(--bg, #ffffff);
+        color: var(--ink);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        scroll-snap-align: start;
+        scroll-snap-stop: always;
+      }
+
+      section[data-theme="dark"] {
+        --ink: rgba(255, 255, 255, 0.92);
+        --muted: rgba(255, 255, 255, 0.74);
+      }
+
+      .wrap {
+        width: min(var(--max), 100%);
+        text-align: center;
+      }
+
+      .kicker {
+        margin: 0 0 10px;
+        font-size: 12px;
+        letter-spacing: 0.22em;
+        text-transform: uppercase;
+        color: var(--muted);
+      }
+
+      h1 {
+        margin: 0 0 8px;
+        font-size: clamp(28px, 6.8vw, 46px);
+        line-height: 1.05;
+        letter-spacing: -0.02em;
+      }
+
+      .sub {
+        margin: 0 0 22px;
+        color: var(--muted);
+        font-size: 14px;
+        line-height: 1.55;
+      }
+
+      h2 {
+        margin: 0 0 14px;
+        font-size: clamp(20px, 4.9vw, 32px);
+        line-height: 1.18;
+        letter-spacing: -0.01em;
+      }
+
+      .text {
+        margin: 0;
+        font-size: clamp(16px, 4.1vw, 20px);
+        line-height: 1.8;
+      }
+
+      .nav {
+        position: fixed;
+        top: 16px;
+        left: 16px;
+        z-index: 10;
+      }
+
+      .back {
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        padding: 10px 12px;
+        border-radius: 999px;
+        text-decoration: none;
+        color: rgba(28, 28, 28, 0.82);
+        background: rgba(255, 255, 255, 0.78);
+        border: 1px solid rgba(28, 28, 28, 0.1);
+        backdrop-filter: blur(10px);
+        font-size: 13px;
+        line-height: 1;
+      }
+
+      body.darkNav .back {
+        color: rgba(255, 255, 255, 0.9);
+        background: rgba(0, 0, 0, 0.24);
+        border-color: rgba(255, 255, 255, 0.14);
+      }
+
+      .back:focus-visible {
+        outline: 3px solid rgba(28, 28, 28, 0.22);
+        outline-offset: 3px;
+      }
+
+      body.darkNav .back:focus-visible {
+        outline-color: rgba(255, 255, 255, 0.22);
+      }
+
+      /* Fade-in only (no slide / no transform). */
+      .reveal {
+        opacity: 0;
+        transition: opacity 900ms ease;
+        transition-delay: var(--d, 0ms);
+      }
+
+      .reveal.is-visible {
+        opacity: 1;
+      }
+
+      .reduced-motion .reveal {
+        opacity: 1 !important;
+        transition: none !important;
+      }
+
+      @media (max-width: 420px) {
+        .nav {
+          top: 12px;
+          left: 12px;
+        }
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        main {
+          scroll-behavior: auto;
+          scroll-snap-type: none;
+        }
+      }
+
+      body.gateOpen {
+        overflow: hidden;
+      }
+
+      body.gateOpen main {
+        pointer-events: none;
+        user-select: none;
+      }
+
+      .audioGate {
+        position: fixed;
+        inset: 0;
+        z-index: 50;
+        display: grid;
+        place-items: center;
+        padding: 28px 20px;
+        background: radial-gradient(
+            900px 700px at 18% 18%,
+            rgba(255, 241, 244, 0.9),
+            transparent 55%
+          ),
+          radial-gradient(
+            1000px 760px at 85% 22%,
+            rgba(234, 244, 248, 0.88),
+            transparent 58%
+          ),
+          radial-gradient(
+            1000px 720px at 55% 98%,
+            rgba(245, 247, 242, 0.96),
+            transparent 60%
+          ),
+          rgba(255, 255, 255, 0.82);
+        backdrop-filter: blur(10px);
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity 220ms ease;
+      }
+
+      .audioGate.open {
+        opacity: 1;
+        pointer-events: auto;
+      }
+
+      .gateCard {
+        width: min(520px, 100%);
+        border-radius: 24px;
+        padding: 26px 22px 22px;
+        background: rgba(255, 255, 255, 0.72);
+        border: 1px solid rgba(28, 28, 28, 0.09);
+        box-shadow: 0 28px 90px rgba(28, 28, 28, 0.16);
+        text-align: center;
+      }
+
+      .gateIcon {
+        font-size: 38px;
+        line-height: 1;
+        margin-bottom: 10px;
+      }
+
+      .gateTitle {
+        margin: 0 0 8px;
+        font-size: 22px;
+        letter-spacing: -0.01em;
+      }
+
+      .gateHint {
+        margin: 0 0 18px;
+        color: rgba(28, 28, 28, 0.74);
+        font-size: 13px;
+        line-height: 1.45;
+      }
+
+      .gateBtn {
+        width: 100%;
+        border: 0;
+        border-radius: 999px;
+        padding: 14px 16px;
+        font-family: inherit;
+        font-weight: 700;
+        font-size: 15px;
+        cursor: pointer;
+        color: rgba(28, 28, 28, 0.92);
+        background: linear-gradient(135deg, #fff1f4, #eaf4f8 55%, #fffbea);
+        box-shadow: 0 16px 40px rgba(28, 28, 28, 0.14);
+        transition: filter 180ms ease, box-shadow 180ms ease, transform 180ms ease;
+      }
+
+      .gateBtn:hover {
+        filter: brightness(1.02);
+        box-shadow: 0 22px 56px rgba(28, 28, 28, 0.18);
+      }
+
+      .gateBtn:active {
+        transform: scale(0.99);
+      }
+
+      .gateBtn:disabled {
+        opacity: 0.7;
+        cursor: progress;
+      }
+
+      .gateBtn:focus-visible {
+        outline: 3px solid rgba(28, 28, 28, 0.22);
+        outline-offset: 3px;
+      }
+
+      .gateStatus {
+        margin: 14px 0 0;
+        min-height: 1.2em;
+        font-size: 12px;
+        color: rgba(28, 28, 28, 0.68);
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        .audioGate {
+          transition: none;
+        }
+
+        .gateBtn {
+          transition: none;
+        }
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="audioGate open" id="audioGate" role="dialog" aria-modal="true">
+      <div class="gateCard">
+        <div class="gateIcon" aria-hidden="true">💍</div>
+        <h2 class="gateTitle">Promise Day</h2>
+        <p class="gateHint">Sound on. Tap to start the song.</p>
+        <button class="gateBtn" id="gateBtn" type="button">Tap on me</button>
+        <p class="gateStatus" id="gateStatus" aria-live="polite"></p>
+      </div>
+    </div>
+
+    <nav class="nav" aria-label="Navigation">
+      <a class="back" href="../index.html">&larr; Valentine</a>
+    </nav>
+
+    <audio id="bgMusic" preload="auto" loop playsinline>
+      <source src="../dayvale.mpeg" type="audio/mpeg" />
+    </audio>
+
+    <main id="scroller" aria-label="Promise Day: 11 Waade - 11 Ehsaas">
+      <section style="--bg: #f5f7f2">
+        <div class="wrap">
+          <p class="kicker reveal" style="--d: 0ms">💍 PROMISE DAY</p>
+          <h1 class="reveal" style="--d: 120ms">11 Waade – 11 Ehsaas</h1>
+          <p class="sub reveal" style="--d: 240ms">(11-11 ke naam)</p>
+
+          <h2 class="reveal" style="--d: 360ms">🌱 PROMISE 1 — Understanding</h2>
+          <p class="text reveal" style="--d: 480ms">
+            Main yeh wada karta hoon,<br />
+            jab tum chup ho, main yeh nahi sochunga ki tumhe farq nahi padta,<br />
+            main yeh samjhunga ki tum mehsoos kar rahi ho.
+          </p>
+        </div>
+      </section>
+
+      <section style="--bg: #fff1f4">
+        <div class="wrap">
+          <h2 class="reveal" style="--d: 0ms">🌸 PROMISE 2 — Apnapan</h2>
+          <p class="text reveal" style="--d: 140ms">
+            Main promise karta hoon,<br />
+            tumhe kabhi yeh feel nahi hone dunga ki tum akeli ho,<br />
+            tum meri apni ho — aur hamesha rahogi.
+          </p>
+        </div>
+      </section>
+
+      <section style="--bg: #eaf4f8">
+        <div class="wrap">
+          <h2 class="reveal" style="--d: 0ms">🌊 PROMISE 3 — Emotional Safety</h2>
+          <p class="text reveal" style="--d: 140ms">
+            Jab tum hurt ho,<br />
+            main tumhe strong banne ko nahi kahunga,<br />
+            main bas tumhare saath baith jaunga.
+          </p>
+        </div>
+      </section>
+
+      <section style="--bg: #efefef">
+        <div class="wrap">
+          <h2 class="reveal" style="--d: 0ms">☁️ PROMISE 4 — Khamoshi</h2>
+          <p class="text reveal" style="--d: 140ms">
+            Main yeh wada karta hoon,<br />
+            tumhari khamoshi se darrunga nahi,<br />
+            main usse samajhne ki koshish karunga.
+          </p>
+        </div>
+      </section>
+
+      <section style="--bg: #fff6e5">
+        <div class="wrap">
+          <h2 class="reveal" style="--d: 0ms">🔥 PROMISE 5 — Respect</h2>
+          <p class="text reveal" style="--d: 140ms">
+            Chahe baat chhoti ho ya badi,<br />
+            tumhari feelings meri nazar mein<br />
+            hamesha important rahengi.
+          </p>
+        </div>
+      </section>
+
+      <section style="--bg: #ece7f2">
+        <div class="wrap">
+          <h2 class="reveal" style="--d: 0ms">🌙 PROMISE 6 — Growth</h2>
+          <p class="text reveal" style="--d: 140ms">
+            Main perfect hone ka wada nahi karta,<br />
+            par har din thoda better banne ka wada karta hoon —<br />
+            tumhare liye.
+          </p>
+        </div>
+      </section>
+
+      <section style="--bg: #fffbea">
+        <div class="wrap">
+          <h2 class="reveal" style="--d: 0ms">🌼 PROMISE 7 — Happiness</h2>
+          <p class="text reveal" style="--d: 140ms">
+            Jab tum hanso,<br />
+            main uss hansi ki wajah banna chahta hoon,<br />
+            aur jab udaasi aaye, main kahin nahi jaunga.
+          </p>
+        </div>
+      </section>
+
+      <section style="--bg: #e9f0ed">
+        <div class="wrap">
+          <h2 class="reveal" style="--d: 0ms">🕊️ PROMISE 8 — Distance</h2>
+          <p class="text reveal" style="--d: 140ms">
+            Chahe hum door ho,<br />
+            main yeh wada karta hoon ki mera yakeen,<br />
+            kabhi door nahi hoga.
+          </p>
+        </div>
+      </section>
+
+      <section style="--bg: #ffffff">
+        <div class="wrap">
+          <h2 class="reveal" style="--d: 0ms">🤍 PROMISE 9 — Friendship</h2>
+          <p class="text reveal" style="--d: 140ms">
+            Main sirf tumhara husband nahi,<br />
+            tumhara dost bhi ban ke rehna chahta hoon —<br />
+            bina judgement ke.
+          </p>
+        </div>
+      </section>
+
+      <section style="--bg: #fdedec">
+        <div class="wrap">
+          <h2 class="reveal" style="--d: 0ms">🌹 PROMISE 10 — Sukoon</h2>
+          <p class="text reveal" style="--d: 140ms">
+            Main yeh wada karta hoon,<br />
+            tumhara sukoon meri zimmedari hoga,<br />
+            chahe zindagi jaisi bhi ho.
+          </p>
+        </div>
+      </section>
+
+      <section data-theme="dark" style="--bg: #1c1c1c">
+        <div class="wrap">
+          <h2 class="reveal" style="--d: 0ms">✨ PROMISE 11 — 11-11 (Signature)</h2>
+          <p class="text reveal" style="--d: 140ms">
+            11 November ko humne ek-dusre ko choose kiya tha,<br />
+            main aaj yeh wada karta hoon,<br />
+            har din, har haal mein, main tumhe hi choose karta rahunga.
+          </p>
+        </div>
+      </section>
+
+      <section data-theme="dark" style="--bg: #0f2a24">
+        <div class="wrap">
+          <h2 class="reveal" style="--d: 0ms">💗 FINAL SCREEN — Forever</h2>
+          <p class="text reveal" style="--d: 160ms">
+            Yeh waade sirf aaj ke liye nahi,<br />
+            yeh meri zindagi ka tareeqa hain — tumhare saath.<br /><br />
+            Happy Promise Day, Sana❤️.
+          </p>
+        </div>
+      </section>
+    </main>
+
+    <script>
+      (() => {
+        const scroller = document.getElementById("scroller");
+        const bgMusic = document.getElementById("bgMusic");
+        const gate = document.getElementById("audioGate");
+        const gateBtn = document.getElementById("gateBtn");
+        const gateStatus = document.getElementById("gateStatus");
+
+        const reduce =
+          window.matchMedia &&
+          window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+        if (reduce) document.documentElement.classList.add("reduced-motion");
+
+        function setGateStatus(msg) {
+          if (!gateStatus) return;
+          gateStatus.textContent = msg || "";
+        }
+
+        function closeGate() {
+          document.body.classList.remove("gateOpen");
+          if (!gate) return;
+          gate.classList.remove("open");
+          gate.setAttribute("aria-hidden", "true");
+          window.setTimeout(() => gate.remove(), 260);
+        }
+
+        function initAfterGate() {
+          if (!scroller) return;
+
+          const revealEls = Array.from(document.querySelectorAll(".reveal"));
+          if (revealEls.length) {
+            if (!("IntersectionObserver" in window)) {
+              for (const el of revealEls) el.classList.add("is-visible");
+            } else {
+              const io = new IntersectionObserver(
+                (entries) => {
+                  for (const e of entries) {
+                    if (!e.isIntersecting) continue;
+                    e.target.classList.add("is-visible");
+                    io.unobserve(e.target);
+                  }
+                },
+                { root: scroller, threshold: 0.35 }
+              );
+
+              for (const el of revealEls) io.observe(el);
+            }
+          }
+
+          const sections = Array.from(scroller.querySelectorAll("section"));
+          if (sections.length) {
+            if ("IntersectionObserver" in window) {
+              const navObserver = new IntersectionObserver(
+                (entries) => {
+                  let best = null;
+                  for (const e of entries) {
+                    if (!e.isIntersecting) continue;
+                    if (!best || e.intersectionRatio > best.intersectionRatio)
+                      best = e;
+                  }
+                  if (!best) return;
+                  const isDark = best.target.getAttribute("data-theme") === "dark";
+                  document.body.classList.toggle("darkNav", isDark);
+                },
+                { root: scroller, threshold: [0.25, 0.5, 0.75] }
+              );
+
+              for (const s of sections) navObserver.observe(s);
+            }
+          }
+        }
+
+        function tryStartMusic({ silent = false } = {}) {
+          if (!bgMusic) return Promise.resolve(false);
+
+          try {
+            bgMusic.currentTime = 0;
+          } catch {
+            // Some browsers throw before metadata; ignore.
+          }
+
+          const p = bgMusic.play();
+          if (!p || typeof p.then !== "function") {
+            return Promise.resolve(!bgMusic.paused);
+          }
+
+          return p
+            .then(() => true)
+            .catch(() => {
+              if (!silent) setGateStatus("Tap again to start the music.");
+              return false;
+            });
+        }
+
+        document.body.classList.add("gateOpen");
+        if (gateBtn) gateBtn.focus({ preventScroll: true });
+
+        if (bgMusic) {
+          bgMusic.muted = false;
+          bgMusic.volume = 1;
+          try {
+            bgMusic.currentTime = 0;
+          } catch {
+            // ignore
+          }
+          bgMusic.load();
+        }
+
+        // If audio is missing/unavailable, let them continue without it.
+        if (bgMusic) {
+          bgMusic.addEventListener(
+            "error",
+            () => {
+              if (gateBtn) gateBtn.disabled = true;
+              setGateStatus("Audio not available. Continue anyway.");
+              window.setTimeout(() => {
+                closeGate();
+                initAfterGate();
+              }, 800);
+            },
+            { once: true }
+          );
+        }
+
+        function startFromGate() {
+          if (gateBtn) gateBtn.disabled = true;
+          setGateStatus("Starting…");
+
+          tryStartMusic({ silent: true }).then((ok) => {
+            if (ok) {
+              setGateStatus("");
+              closeGate();
+              initAfterGate();
+              return;
+            }
+
+            if (gateBtn) gateBtn.disabled = false;
+            setGateStatus("Tap again to start the music.");
+          });
+        }
+
+        if (gateBtn) gateBtn.addEventListener("click", startFromGate);
+        if (gate)
+          gate.addEventListener("click", (e) => {
+            if (e.target === gate) startFromGate();
+          });
+      })();
+    </script>
+  </body>
+</html>
