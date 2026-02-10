@@ -698,6 +698,27 @@
           gate.addEventListener("click", (e) => {
             if (e.target === gate) startFromGate();
           });
+
+        document.addEventListener("click", (e) => {
+          const btn = e.target.closest("button");
+          if (!btn) return;
+          const action = btn.dataset.action || "";
+          if (!action) return;
+          if (!scroller) return;
+
+          if (action === "top") {
+            scroller.scrollTo({ top: 0, behavior: reduce ? "auto" : "smooth" });
+            return;
+          }
+
+          if (action === "next") {
+            const section = btn.closest("section");
+            if (!section) return;
+            const next = section.nextElementSibling;
+            if (!next) return;
+            next.scrollIntoView({ behavior: reduce ? "auto" : "smooth" });
+          }
+        });
       })();
     </script>
   </body>
