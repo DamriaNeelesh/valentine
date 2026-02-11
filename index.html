@@ -1631,6 +1631,430 @@
         text-shadow: 0 18px 60px rgba(122, 74, 42, 0.1);
       }
 
+      /* Day 5 (Hug Day): The Hug That Stays */
+      body[data-day="5"] {
+        --hug-bg: #fdedec;
+        --hug-ink: #2a1d22;
+        --hug-border: rgba(120, 54, 76, 0.24);
+        --hug-shade: rgba(27, 18, 23, 0.14);
+        background: radial-gradient(
+            1200px 820px at 10% 8%,
+            rgba(255, 255, 255, 0.78),
+            transparent 58%
+          ),
+          radial-gradient(
+            900px 720px at 92% 18%,
+            rgba(178, 58, 90, 0.2),
+            transparent 62%
+          ),
+          radial-gradient(
+            940px 720px at 52% 100%,
+            rgba(15, 42, 36, 0.12),
+            transparent 66%
+          ),
+          var(--hug-bg);
+        color: var(--hug-ink);
+        padding: 12px;
+        transition: background 420ms ease, color 320ms ease;
+      }
+
+      body[data-day="5"] .bg-glow,
+      body[data-day="5"] .petals,
+      body[data-day="5"] .roses {
+        display: none;
+      }
+
+      body[data-day="5"] .stage {
+        width: min(860px, 100%);
+      }
+
+      body[data-day="5"] .card {
+        width: 100%;
+        min-height: min(720px, calc(100vh - 24px));
+        min-height: min(720px, calc(100svh - 24px));
+        padding: clamp(26px, 5vw, 56px) clamp(18px, 4.2vw, 50px);
+        border-radius: clamp(24px, 5vw, 38px);
+        background: linear-gradient(
+            165deg,
+            rgba(255, 255, 255, 0.54),
+            rgba(255, 255, 255, 0.12)
+          ),
+          var(--hug-bg);
+        border: 1px solid var(--hug-border);
+        box-shadow: 0 30px 90px var(--hug-shade), inset 0 1px 0 rgba(255, 255, 255, 0.36);
+        color: var(--hug-ink);
+        display: grid;
+        grid-template-rows: auto auto 1fr;
+        gap: 14px;
+        align-items: start;
+        overflow: auto;
+        overscroll-behavior: contain;
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: none;
+        transition: background 360ms ease, color 320ms ease, border-color 320ms ease,
+          box-shadow 320ms ease;
+      }
+
+      body[data-day="5"] .card::before,
+      body[data-day="5"] .card::after {
+        display: block;
+      }
+
+      body[data-day="5"] .card::before {
+        inset: -2px;
+        opacity: 1;
+        background: radial-gradient(
+            440px 240px at 20% 6%,
+            rgba(255, 255, 255, 0.55),
+            transparent 70%
+          ),
+          radial-gradient(
+            420px 230px at 86% 12%,
+            rgba(178, 58, 90, 0.12),
+            transparent 74%
+          );
+      }
+
+      body[data-day="5"] .card::after {
+        right: -74px;
+        top: -90px;
+        width: 240px;
+        height: 240px;
+        transform: rotate(0deg);
+        background: radial-gradient(
+          circle at 36% 38%,
+          rgba(178, 58, 90, 0.14),
+          transparent 64%
+        );
+      }
+
+      body[data-day="5"] .hugSeal {
+        position: relative;
+        margin: 0 auto;
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        padding: 10px 14px;
+        border-radius: 999px;
+        border: 1px solid rgba(120, 54, 76, 0.24);
+        background: rgba(255, 255, 255, 0.56);
+        color: rgba(63, 35, 47, 0.9);
+        font-size: 12px;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        z-index: 1;
+      }
+
+      body[data-day="5"] .hugSeal i {
+        width: 10px;
+        height: 10px;
+        border-radius: 999px;
+        background: linear-gradient(135deg, #b23a5a, #e37ea3);
+        box-shadow: 0 0 0 6px rgba(178, 58, 90, 0.14);
+      }
+
+      body[data-day="5"] .hugMeta {
+        position: relative;
+        margin: 0;
+        text-align: center;
+        font-size: 14px;
+        color: rgba(52, 30, 39, 0.78);
+        z-index: 1;
+      }
+
+      body[data-day="5"] .hugMeta strong {
+        color: rgba(52, 30, 39, 0.9);
+      }
+
+      body[data-day="5"] .hugMeta .sep {
+        margin: 0 8px;
+        color: rgba(52, 30, 39, 0.5);
+      }
+
+      body[data-day="5"] .card::-webkit-scrollbar {
+        width: 0;
+        height: 0;
+      }
+
+      body[data-day="5"] .hugFlow {
+        width: min(680px, 100%);
+        margin: 0 auto;
+        display: grid;
+        align-content: center;
+        min-height: 100%;
+      }
+
+      body[data-day="5"] .hugScene {
+        width: 100%;
+        display: grid;
+        justify-items: center;
+        gap: 20px;
+      }
+
+      body[data-day="5"] .hugText {
+        margin: 0;
+        text-align: center;
+        font-family: "Fraunces", ui-serif, Georgia, serif;
+        font-weight: 600;
+        font-size: clamp(22px, 4.7vw, 34px);
+        line-height: 1.4;
+        letter-spacing: -0.01em;
+        color: inherit;
+        text-wrap: balance;
+        max-width: 24ch;
+      }
+
+      body[data-day="5"] .hugButtons {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 12px;
+      }
+
+      body[data-day="5"] .hugBtn {
+        min-height: 48px;
+        padding: 13px 20px;
+        border-radius: 999px;
+        border: 1px solid rgba(120, 54, 76, 0.22);
+        background: rgba(255, 255, 255, 0.74);
+        color: rgba(38, 31, 35, 0.92);
+        font-family: "Sora", ui-sans-serif, system-ui, sans-serif;
+        font-weight: 600;
+        font-size: 14px;
+        letter-spacing: 0.01em;
+        box-shadow: 0 12px 34px rgba(120, 54, 76, 0.1);
+      }
+
+      body[data-day="5"] .hugBtn:hover {
+        transform: translateY(-2px);
+        filter: brightness(1.03);
+        box-shadow: 0 16px 44px rgba(120, 54, 76, 0.16);
+      }
+
+      body[data-day="5"] .hugBtn:active {
+        transform: scale(0.99);
+      }
+
+      body[data-day="5"] .hugChoice {
+        min-width: min(260px, 80vw);
+      }
+
+      body[data-day="5"] .hugGate {
+        width: 100%;
+        display: grid;
+        justify-items: center;
+        gap: 14px;
+      }
+
+      body[data-day="5"] .hugGateBtn {
+        width: min(214px, 72vw);
+        aspect-ratio: 1;
+        border-radius: 999px;
+        border: 1px solid rgba(38, 31, 35, 0.18);
+        background: radial-gradient(
+            circle at 28% 24%,
+            rgba(255, 255, 255, 0.95),
+            rgba(255, 255, 255, 0.36) 42%,
+            rgba(80, 40, 58, 0.08) 74%
+          ),
+          linear-gradient(
+            135deg,
+            rgba(253, 237, 236, 0.92),
+            rgba(236, 231, 242, 0.9)
+          );
+        color: rgba(38, 31, 35, 0.94);
+        font-family: "Fraunces", ui-serif, Georgia, serif;
+        font-weight: 700;
+        font-size: clamp(17px, 4.8vw, 22px);
+        line-height: 1.2;
+        letter-spacing: -0.01em;
+        display: grid;
+        place-items: center;
+        padding: 18px;
+        text-align: center;
+        cursor: pointer;
+        transition: transform 180ms ease, filter 180ms ease;
+        animation: gatePulse 1900ms ease-in-out infinite;
+        box-shadow: 0 24px 70px rgba(120, 54, 76, 0.2);
+        z-index: 1;
+      }
+
+      body[data-day="5"] .hugGateBtn::before {
+        content: "";
+        position: absolute;
+        inset: -12px;
+        border-radius: 999px;
+        border: 1px dashed rgba(120, 54, 76, 0.24);
+        opacity: 0.86;
+        animation: spin 9s linear infinite;
+      }
+
+      body[data-day="5"] .hugGateBtn:hover {
+        filter: brightness(1.03);
+      }
+
+      body[data-day="5"] .hugGateBtn:active {
+        transform: scale(0.99);
+      }
+
+      body[data-day="5"] .hugGateBtn:focus-visible {
+        outline: 3px solid rgba(38, 31, 35, 0.22);
+        outline-offset: 7px;
+      }
+
+      body[data-day="5"] .hugGateNote {
+        margin: 0;
+        font-size: 12px;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        color: rgba(38, 31, 35, 0.62);
+      }
+
+      body[data-day="5"] .hugImageSlot {
+        width: min(430px, 100%);
+        min-height: 214px;
+        display: grid;
+        place-items: center;
+      }
+
+      body[data-day="5"] .hugImageFrame {
+        position: relative;
+        width: 100%;
+        aspect-ratio: 4 / 3;
+        border-radius: 22px;
+        overflow: hidden;
+        border: 1px solid rgba(120, 54, 76, 0.2);
+        box-shadow: 0 24px 60px rgba(120, 54, 76, 0.16);
+        background: rgba(255, 255, 255, 0.42);
+      }
+
+      body[data-day="5"] .hugImageSlot.placeholder .hugImageFrame {
+        background: linear-gradient(
+            130deg,
+            rgba(255, 255, 255, 0.66),
+            rgba(255, 255, 255, 0.24)
+          ),
+          linear-gradient(140deg, rgba(178, 58, 90, 0.14), rgba(51, 31, 36, 0.06));
+      }
+
+      body[data-day="5"] .hugImageSlot.placeholder .hugImageFrame::before {
+        content: "\2665   \2665   \2665";
+        position: absolute;
+        inset: 0;
+        display: grid;
+        place-items: center;
+        font-size: clamp(20px, 5vw, 28px);
+        letter-spacing: 0.24em;
+        color: rgba(178, 58, 90, 0.32);
+      }
+
+      body[data-day="5"] .hugImageHint {
+        margin: 8px 0 0;
+        font-size: 11px;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        color: rgba(52, 30, 39, 0.56);
+      }
+
+      body[data-day="5"] .hugImageSlot.ready .hugImageHint {
+        display: none;
+      }
+
+      body[data-day="5"] .hugFinalImage {
+        width: 100%;
+        height: 100%;
+        display: block;
+        object-fit: cover;
+        object-position: center;
+      }
+
+      body[data-day="5"] #card.hugDark {
+        border-color: rgba(255, 255, 255, 0.2);
+        box-shadow: 0 32px 90px rgba(0, 0, 0, 0.34);
+        color: #f5f5f5;
+      }
+
+      body[data-day="5"] #card.hugDark .hugBtn {
+        border-color: rgba(255, 255, 255, 0.3);
+        background: rgba(255, 255, 255, 0.15);
+        color: #ffffff;
+      }
+
+      body[data-day="5"] #card.hugDark .hugBtn:focus-visible {
+        outline-color: rgba(255, 255, 255, 0.44);
+      }
+
+      body[data-day="5"] #card.hugDark .hugMeta {
+        color: rgba(255, 255, 255, 0.76);
+      }
+
+      body[data-day="5"] #card.hugDark .hugMeta strong {
+        color: #ffffff;
+      }
+
+      body[data-day="5"] #card.hugDark .hugMeta .sep {
+        color: rgba(255, 255, 255, 0.4);
+      }
+
+      body[data-day="5"] #card.hugDark .hugSeal {
+        background: rgba(255, 255, 255, 0.1);
+        border-color: rgba(255, 255, 255, 0.24);
+        color: rgba(255, 255, 255, 0.92);
+      }
+
+      body[data-day="5"] #card.hugDark .hugImageFrame {
+        border-color: rgba(255, 255, 255, 0.22);
+        box-shadow: 0 24px 60px rgba(0, 0, 0, 0.34);
+      }
+
+      body[data-day="5"] #card.hugDark .hugImageSlot.placeholder .hugImageFrame {
+        background: linear-gradient(
+            130deg,
+            rgba(255, 255, 255, 0.2),
+            rgba(255, 255, 255, 0.1)
+          ),
+          linear-gradient(
+            140deg,
+            rgba(236, 231, 242, 0.28),
+            rgba(15, 42, 36, 0.24)
+          );
+      }
+
+      body[data-day="5"] #card.hugDark .hugImageHint {
+        color: rgba(255, 255, 255, 0.62);
+      }
+
+      @media (max-width: 560px) {
+        body[data-day="5"] .card {
+          min-height: calc(100vh - 24px);
+          min-height: calc(100svh - 24px);
+          padding: 24px 14px;
+          gap: 12px;
+        }
+
+        body[data-day="5"] .hugFlow {
+          width: 100%;
+        }
+
+        body[data-day="5"] .hugText {
+          max-width: 26ch;
+          font-size: clamp(20px, 6.4vw, 28px);
+        }
+
+        body[data-day="5"] .hugImageSlot {
+          min-height: 178px;
+        }
+
+        body[data-day="5"] .hugImageFrame {
+          border-radius: 18px;
+        }
+
+        body[data-day="5"] .hugChoice {
+          min-width: min(250px, 88vw);
+        }
+      }
+
       @media (max-width: 440px) {
         .card {
           padding: 48px 22px 34px;
@@ -1669,7 +2093,9 @@
         .sweetChoco,
         .sweetGift,
         .gateBtn,
-        .gateBtn::before {
+        .gateBtn::before,
+        .hugGateBtn,
+        .hugGateBtn::before {
           animation: none !important;
         }
 
@@ -1698,7 +2124,7 @@
           <div class="roseEmoji" aria-hidden="true">🌹</div>
         </div>
 
-        <div class="forLine">For <span class="script" id="toName">Sana</span></div>
+        <div class="forLine">For <span class="script" id="toName">Sana Chauhan</span></div>
 
         <p class="quoteText">
           I didn’t fall in love suddenly,<br />
@@ -1754,7 +2180,7 @@
         </div>
 
         <div class="dedication">
-          For <span class="script" id="modalTo">Sana</span>
+          For <span class="script" id="modalTo">Sana Chauhan</span>
           <span class="sep">|</span>
           From <span id="modalFrom">Adil Khan</span>
         </div>
@@ -1776,7 +2202,7 @@
 
     <script>
       (() => {
-        const DEFAULT_TO = "Sana";
+        const DEFAULT_TO = "Sana Chauhan";
         const DEFAULT_FROM = "Adil Khan";
         const CHOCO = "\uD83C\uDF6B";
         const GIFT = "\uD83D\uDC9D";
@@ -1800,7 +2226,7 @@
         const day = (() => {
           const raw = (params.get("day") || params.get("d") || "").trim();
           const n = Number.parseInt(raw, 10);
-          if (n === 2 || n === 3 || n === 4) return n;
+          if (n === 2 || n === 3 || n === 4 || n === 5) return n;
           return 1;
         })();
 
@@ -1850,7 +2276,9 @@
           }
 
           document.title =
-            day === 4
+            day === 5
+              ? `Happy Hug Day, ${to}`
+              : day === 4
               ? `Happy Teddy Day, ${to}`
               : day === 3
                 ? `Happy Chocolate Day, ${to}`
@@ -2790,6 +3218,271 @@
           renderStep();
         }
 
+        function initDay5() {
+          if (!card) return;
+
+          const FINAL_HUG_IMAGE = "firsthusgg.jpeg";
+          const finalTo = normalizeName(params.get("to") || params.get("name"), DEFAULT_TO);
+
+          if (bgMusic) {
+            const src = bgMusic.querySelector("source");
+            if (src) src.src = "day5.mpeg";
+            delete bgMusic.dataset.error;
+            bgMusic.muted = false;
+            bgMusic.volume = 1;
+            bgMusic.currentTime = 0;
+            bgMusic.loop = true;
+            bgMusic.load();
+            bgMusic.addEventListener(
+              "error",
+              () => {
+                bgMusic.dataset.error = "1";
+              },
+              { once: true }
+            );
+          }
+
+          let musicPrompted = false;
+
+          function showMusicPrompt() {
+            if (musicPrompted) return;
+            musicPrompted = true;
+            showToast("Tap once more to start the song", 2600);
+          }
+
+          function tryStartMusic({ silent = false } = {}) {
+            if (!bgMusic) return Promise.resolve(false);
+            if (bgMusic.dataset.error) return Promise.resolve(false);
+            if (!bgMusic.paused) return Promise.resolve(true);
+
+            const p = bgMusic.play();
+            if (!p || typeof p.then !== "function") {
+              return Promise.resolve(!bgMusic.paused);
+            }
+
+            return p.then(() => true).catch(() => {
+              if (!silent) showMusicPrompt();
+              return false;
+            });
+          }
+
+          card.setAttribute("aria-label", "Hug Day card");
+          card.innerHTML = `
+            <div class="hugSeal"><i aria-hidden="true"></i> Day 5 - Hug Day</div>
+            <p class="hugMeta">
+              For <span class="script" id="toName">${DEFAULT_TO}</span>
+              <span class="sep">|</span>
+              From <strong id="fromName">${DEFAULT_FROM}</strong>
+            </p>
+            <div class="flow flowSwap hugFlow" id="flow"></div>
+          `;
+
+          const flow = document.getElementById("flow");
+          if (!flow) return;
+
+          const SCENES = {
+            1: {
+              bg: "#FDEDEC",
+              ink: "#2A1D22",
+              dark: false,
+              text:
+                "Aaj Hug Day hai... &#129293;<br />aur main chahta hoon yeh sirf ek message na ho.",
+              button: "Aage",
+            },
+            2: {
+              bg: "#FFF6E5",
+              ink: "#2C2118",
+              dark: false,
+              text:
+                "Hug ka matlab sirf baahon mein lena nahi hota.<br />Kabhi kabhi hug matlab hota hai - &quot;main hoon.&quot; &#129782;",
+              button: "Continue",
+            },
+            3: {
+              bg: "#EAF4F8",
+              ink: "#1C2730",
+              dark: false,
+              text:
+                "Jab tum hasi mein baat ignore kar deti ho,<br />par andar se thoda sa hurt hoti ho... &#128173;",
+              button: "Aage",
+            },
+            4: {
+              bg: "#EFEFEF",
+              ink: "#252525",
+              dark: false,
+              text:
+                "Jab tum strong banne ki koshish karti ho,<br />par kisi ko pata nahi chalne deti ki mood kaisa hai... &#129293;",
+              button: "Hold",
+            },
+            5: {
+              bg: "#E9F0ED",
+              ink: "#1A2B25",
+              dark: false,
+              text:
+                "Us waqt main bas itna karna chahta hoon -<br />tumhe apne paas bitha ke, bina sawaal ke,<br />bas chup rehna... tumhare saath. &#127793;",
+              button: "Continue",
+            },
+            6: {
+              bg: "#1C1C1C",
+              ink: "#F4F4F4",
+              dark: true,
+              text:
+                "Door hoon aaj...<br />aur shayad haath pakad nahi sakta.<br /><br />Par dil se main tumhe utni hi zor se hold kiye hue hoon. &#10084;&#65039;",
+              button: "Aage",
+            },
+            7: {
+              bg: "#ECE7F2",
+              ink: "#2A1F2E",
+              dark: false,
+              text:
+                "Agar main abhi tumhare saamne hota...<br />toh tum kya karti? &#10024;",
+            },
+            8: {
+              bg: "#0F2A24",
+              ink: "#F5F8F7",
+              dark: true,
+              text:
+                `Chahe tum muskurao ya chup raho,<br />
+                main tumhe hug karta.<br /><br />
+                Aisa hug jo sirf ek second ka nahi,<br />
+                balki har mushkil mein saath rehne ka ho.<br /><br />
+                Aaj paas nahi hoon...<br />
+                par mera hug, mera saath,<br />
+                tumse kabhi door nahi hoga. &#128158;<br /><br />
+                Happy Hug Day, meri sukoon ${finalTo}.`,
+            },
+          };
+
+          let step = 0;
+
+          function applyScenePalette(scene) {
+            const bg = scene && scene.bg ? scene.bg : "#FDEDEC";
+            const ink = scene && scene.ink ? scene.ink : "#2A1D22";
+            const dark = !!(scene && scene.dark);
+
+            document.body.style.setProperty("--hug-bg", bg);
+            document.body.style.setProperty("--hug-ink", ink);
+            card.classList.toggle("hugDark", dark);
+          }
+
+          function renderMediaSlot(isFinal) {
+            if (isFinal) {
+              return `
+                <div class="hugImageSlot ready">
+                  <div class="hugImageFrame">
+                    <img
+                      src="${FINAL_HUG_IMAGE}"
+                      alt="Adil Khan and Sana Chauhan"
+                      class="hugFinalImage"
+                    />
+                  </div>
+                </div>
+              `;
+            }
+
+            return `
+              <div class="hugImageSlot placeholder" aria-hidden="true">
+                <div class="hugImageFrame"></div>
+                <p class="hugImageHint">Final hug photo appears at the end</p>
+              </div>
+            `;
+          }
+
+          function renderStep() {
+            if (step === 0) {
+              applyScenePalette({ bg: "#FDEDEC", ink: "#2A1D22", dark: false });
+              flow.innerHTML = `
+                <div class="hugGate">
+                  <button class="hugGateBtn" type="button" data-action="start">
+                    chalo aur aage chalein
+                  </button>
+                  <p class="hugGateNote">Tap to play song</p>
+                </div>
+              `;
+            } else {
+              const scene = SCENES[step] || SCENES[1];
+              applyScenePalette(scene);
+              const media = renderMediaSlot(step === 8);
+
+              let buttons = "";
+              if (step >= 1 && step <= 6) {
+                buttons = `
+                  <div class="hugButtons">
+                    <button class="btn hugBtn" type="button" data-action="next">${scene.button}</button>
+                  </div>
+                `;
+              } else if (step === 7) {
+                buttons = `
+                  <div class="hugButtons">
+                    <button class="btn hugBtn hugChoice" type="button" data-action="final">Bas muskura deti &#128522;</button>
+                    <button class="btn hugBtn hugChoice" type="button" data-action="final">Chup ho jaati &#129293;</button>
+                    <button class="btn hugBtn hugChoice" type="button" data-action="final">ya phir &#128566; I'm shy to say</button>
+                  </div>
+                `;
+              }
+
+              flow.innerHTML = `
+                <div class="hugScene">
+                  <p class="hugText">${scene.text}</p>
+                  ${media}
+                  ${buttons}
+                </div>
+              `;
+            }
+
+            const focusTarget = flow.querySelector("button");
+            if (focusTarget) focusTarget.focus({ preventScroll: true });
+          }
+
+          function go(next) {
+            const n = Math.max(0, Math.min(8, next));
+            if (n === step) return;
+
+            step = n;
+            flow.classList.add("fading");
+            window.setTimeout(() => {
+              renderStep();
+              requestAnimationFrame(() => flow.classList.remove("fading"));
+            }, 170);
+          }
+
+          flow.addEventListener("click", (e) => {
+            const btn = e.target.closest("button");
+            if (!btn) return;
+
+            const action = btn.dataset.action || "";
+            if (action === "start") {
+              btn.disabled = true;
+              if (!bgMusic || bgMusic.dataset.error) {
+                showToast("Audio not available", 2200);
+                go(1);
+                btn.disabled = false;
+                return;
+              }
+
+              tryStartMusic({ silent: true })
+                .then((ok) => {
+                  if (ok) go(1);
+                  else showToast("Tap once more to start the song", 2200);
+                })
+                .finally(() => {
+                  btn.disabled = false;
+                });
+              return;
+            }
+
+            tryStartMusic();
+
+            if (action === "next") {
+              go(step + 1);
+              return;
+            }
+
+            if (action === "final") go(8);
+          });
+
+          renderStep();
+        }
+
         // Card spotlight follows cursor
         card.addEventListener("pointermove", (e) => {
           const r = card.getBoundingClientRect();
@@ -2821,6 +3514,14 @@
           initDay4();
           applyPersonalization();
           spawnTeddies();
+          return;
+        }
+
+        if (day === 5) {
+          initDay5();
+          applyPersonalization();
+          if (petals) petals.innerHTML = "";
+          if (roses) roses.innerHTML = "";
           return;
         }
 
@@ -2905,3 +3606,4 @@
     </script>
   </body>
 </html>
+
