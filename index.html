@@ -317,8 +317,11 @@
         --my: 18%;
 
         position: relative;
+        width: 100%;
         border-radius: var(--radius);
         padding: 54px 44px 40px;
+        max-height: min(860px, calc(100vh - 64px));
+        max-height: min(860px, calc(100svh - 64px));
         background: linear-gradient(var(--card), var(--card)) padding-box,
           linear-gradient(
               135deg,
@@ -330,9 +333,17 @@
         border: 1px solid transparent;
         box-shadow: var(--shadow);
         backdrop-filter: blur(10px);
-        overflow: hidden;
+        overflow: auto;
+        overscroll-behavior: contain;
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: none;
         transform-origin: 50% 60%;
         animation: popIn 600ms cubic-bezier(0.2, 0.9, 0.2, 1) both;
+      }
+
+      .card::-webkit-scrollbar {
+        width: 0;
+        height: 0;
       }
 
       @keyframes popIn {
@@ -1122,6 +1133,16 @@
         color: rgba(42, 12, 26, 0.86);
       }
 
+      .quoteText,
+      .screenText,
+      .finalQuote,
+      .forLine,
+      .signature,
+      .dedication,
+      .hugText {
+        overflow-wrap: anywhere;
+      }
+
       body[data-day="2"] .screenText {
         color: rgba(35, 18, 23, 0.88);
       }
@@ -1802,6 +1823,7 @@
         color: inherit;
         text-wrap: balance;
         max-width: 24ch;
+        word-break: break-word;
       }
 
       body[data-day="5"] .hugButtons {
@@ -1923,8 +1945,8 @@
       }
 
       body[data-day="5"] .hugImageSlot {
-        width: min(430px, 94%);
-        min-height: clamp(142px, 24vh, 220px);
+        width: min(460px, 100%);
+        min-height: 0;
         display: grid;
         place-items: center;
       }
@@ -1932,185 +1954,12 @@
       body[data-day="5"] .hugImageFrame {
         position: relative;
         width: 100%;
-        aspect-ratio: 10 / 7;
+        aspect-ratio: 4 / 3;
         border-radius: 22px;
         overflow: hidden;
         border: 1px solid rgba(120, 54, 76, 0.2);
         box-shadow: 0 24px 60px rgba(120, 54, 76, 0.16);
         background: rgba(255, 255, 255, 0.42);
-      }
-
-      body[data-day="5"] .hugImageSlot.placeholder .hugImageFrame {
-        background: linear-gradient(
-            130deg,
-            rgba(255, 255, 255, 0.66),
-            rgba(255, 255, 255, 0.24)
-          ),
-          linear-gradient(140deg, rgba(178, 58, 90, 0.14), rgba(51, 31, 36, 0.06));
-      }
-
-      body[data-day="5"] .hugImageSlot.placeholder .hugImageFrame::before {
-        content: "";
-        position: absolute;
-        inset: 0;
-        background: radial-gradient(
-            60% 58% at 32% 30%,
-            rgba(255, 255, 255, 0.7),
-            transparent 70%
-          ),
-          radial-gradient(
-            54% 58% at 74% 66%,
-            rgba(227, 126, 163, 0.28),
-            transparent 72%
-          ),
-          radial-gradient(
-            46% 42% at 40% 74%,
-            rgba(120, 54, 76, 0.2),
-            transparent 78%
-          );
-        opacity: 0.88;
-        animation: hugShimmer 6s ease-in-out infinite;
-      }
-
-      body[data-day="5"] .hugPlaceholderAura {
-        position: absolute;
-        inset: 16% 14%;
-        border-radius: 999px;
-        background: radial-gradient(
-            46% 56% at 26% 30%,
-            rgba(255, 255, 255, 0.72),
-            transparent 72%
-          ),
-          radial-gradient(
-            56% 58% at 70% 64%,
-            rgba(227, 126, 163, 0.32),
-            transparent 76%
-          ),
-          radial-gradient(
-            40% 34% at 50% 72%,
-            rgba(120, 54, 76, 0.22),
-            transparent 78%
-          );
-        filter: blur(1px);
-        animation: hugAura 5.2s ease-in-out infinite;
-      }
-
-      body[data-day="5"] .hugPlaceholderIcon {
-        position: absolute;
-        left: 50%;
-        top: 50%;
-        width: clamp(62px, 11vw, 88px);
-        height: clamp(62px, 11vw, 88px);
-        transform: translate(-50%, -50%);
-        border-radius: 999px;
-        display: grid;
-        place-items: center;
-        font-size: clamp(30px, 5vw, 44px);
-        line-height: 1;
-        color: rgba(57, 31, 41, 0.9);
-        background: radial-gradient(
-            circle at 28% 24%,
-            rgba(255, 255, 255, 0.9),
-            rgba(255, 255, 255, 0.25) 44%,
-            rgba(227, 126, 163, 0.16) 78%
-          ),
-          rgba(255, 255, 255, 0.42);
-        border: 1px solid rgba(120, 54, 76, 0.28);
-        box-shadow: 0 18px 44px rgba(120, 54, 76, 0.22);
-        animation: hugPulse 2.4s ease-in-out infinite;
-      }
-
-      body[data-day="5"] .hugPlaceholderSpark {
-        position: absolute;
-        inset: 0;
-        background: radial-gradient(
-            7px 7px at 20% 28%,
-            rgba(255, 255, 255, 0.9),
-            transparent 80%
-          ),
-          radial-gradient(
-            6px 6px at 76% 34%,
-            rgba(227, 126, 163, 0.8),
-            transparent 82%
-          ),
-          radial-gradient(
-            6px 6px at 64% 74%,
-            rgba(255, 255, 255, 0.85),
-            transparent 82%
-          ),
-          radial-gradient(
-            5px 5px at 34% 76%,
-            rgba(227, 126, 163, 0.76),
-            transparent 82%
-          );
-        opacity: 0.76;
-        animation: hugSparkle 3.6s linear infinite;
-      }
-
-      @keyframes hugAura {
-        0%,
-        100% {
-          transform: scale(0.98);
-          opacity: 0.72;
-        }
-        50% {
-          transform: scale(1.04);
-          opacity: 0.96;
-        }
-      }
-
-      @keyframes hugPulse {
-        0%,
-        100% {
-          transform: translate(-50%, -50%) scale(1);
-          box-shadow: 0 18px 44px rgba(120, 54, 76, 0.22),
-            0 0 0 0 rgba(227, 126, 163, 0.2);
-        }
-        50% {
-          transform: translate(-50%, -50%) scale(1.04);
-          box-shadow: 0 22px 52px rgba(120, 54, 76, 0.24),
-            0 0 0 16px rgba(227, 126, 163, 0.08);
-        }
-      }
-
-      @keyframes hugSparkle {
-        0% {
-          opacity: 0.5;
-          transform: translateY(2px);
-        }
-        50% {
-          opacity: 0.96;
-          transform: translateY(-2px);
-        }
-        100% {
-          opacity: 0.5;
-          transform: translateY(2px);
-        }
-      }
-
-      @keyframes hugShimmer {
-        0%,
-        100% {
-          opacity: 0.82;
-          transform: translateX(0);
-        }
-        50% {
-          opacity: 1;
-          transform: translateX(2px);
-        }
-      }
-
-      body[data-day="5"] .hugImageHint {
-        margin: 8px 0 0;
-        font-size: 11px;
-        letter-spacing: 0.12em;
-        text-transform: uppercase;
-        color: rgba(52, 30, 39, 0.56);
-        text-align: center;
-      }
-
-      body[data-day="5"] .hugImageSlot.ready .hugImageHint {
-        display: none;
       }
 
       body[data-day="5"] .hugFinalImage {
@@ -2119,6 +1968,36 @@
         display: block;
         object-fit: cover;
         object-position: center;
+      }
+
+      body[data-day="5"] #card.hugFinal {
+        padding-top: clamp(10px, 2vh, 18px);
+      }
+
+      body[data-day="5"] #card.hugFinal .hugSeal {
+        display: none;
+      }
+
+      body[data-day="5"] #card.hugFinal .hugMeta {
+        margin-top: 0;
+        margin-bottom: 2px;
+        font-size: clamp(12px, 1.5vw, 15px);
+      }
+
+      body[data-day="5"] .hugScene[data-step="8"] {
+        width: min(900px, 100%);
+        margin: 0 auto;
+        align-items: center;
+      }
+
+      body[data-day="5"] .hugScene[data-step="8"] .hugText {
+        max-width: 28ch;
+        font-size: clamp(18px, 3vw, 30px);
+        line-height: 1.3;
+      }
+
+      body[data-day="5"] .hugScene[data-step="8"] .hugImageSlot {
+        width: min(420px, 100%);
       }
 
       body[data-day="5"] #card.hugDark {
@@ -2160,97 +2039,78 @@
         box-shadow: 0 24px 60px rgba(0, 0, 0, 0.34);
       }
 
-      body[data-day="5"] #card.hugDark .hugImageSlot.placeholder .hugImageFrame {
-        background: linear-gradient(
-            130deg,
-            rgba(255, 255, 255, 0.2),
-            rgba(255, 255, 255, 0.1)
-          ),
-          linear-gradient(
-            140deg,
-            rgba(236, 231, 242, 0.28),
-            rgba(15, 42, 36, 0.24)
-          );
-      }
-
-      body[data-day="5"] #card.hugDark .hugImageSlot.placeholder .hugImageFrame::before {
-        background: radial-gradient(
-            58% 56% at 30% 28%,
-            rgba(255, 255, 255, 0.24),
-            transparent 72%
-          ),
-          radial-gradient(
-            52% 56% at 74% 64%,
-            rgba(236, 231, 242, 0.26),
-            transparent 74%
-          ),
-          radial-gradient(
-            44% 40% at 46% 74%,
-            rgba(255, 255, 255, 0.14),
-            transparent 78%
-          );
-      }
-
-      body[data-day="5"] #card.hugDark .hugPlaceholderAura {
-        background: radial-gradient(
-            44% 52% at 26% 30%,
-            rgba(255, 255, 255, 0.38),
-            transparent 72%
-          ),
-          radial-gradient(
-            56% 58% at 72% 64%,
-            rgba(236, 231, 242, 0.38),
-            transparent 74%
-          ),
-          radial-gradient(
-            40% 36% at 48% 72%,
-            rgba(255, 255, 255, 0.2),
-            transparent 76%
-          );
-      }
-
-      body[data-day="5"] #card.hugDark .hugPlaceholderIcon {
-        color: rgba(255, 255, 255, 0.96);
-        border-color: rgba(255, 255, 255, 0.34);
-        background: radial-gradient(
-            circle at 28% 24%,
-            rgba(255, 255, 255, 0.34),
-            rgba(255, 255, 255, 0.12) 44%,
-            rgba(236, 231, 242, 0.22) 78%
-          ),
-          rgba(255, 255, 255, 0.06);
-        box-shadow: 0 20px 54px rgba(0, 0, 0, 0.34);
-      }
-
-      body[data-day="5"] #card.hugDark .hugPlaceholderSpark {
-        background: radial-gradient(
-            7px 7px at 20% 28%,
-            rgba(255, 255, 255, 0.94),
-            transparent 80%
-          ),
-          radial-gradient(
-            6px 6px at 76% 34%,
-            rgba(236, 231, 242, 0.84),
-            transparent 82%
-          ),
-          radial-gradient(
-            6px 6px at 64% 74%,
-            rgba(255, 255, 255, 0.86),
-            transparent 82%
-          ),
-          radial-gradient(
-            5px 5px at 34% 76%,
-            rgba(236, 231, 242, 0.82),
-            transparent 82%
-          );
-        opacity: 0.84;
-      }
-
-      body[data-day="5"] #card.hugDark .hugImageHint {
-        color: rgba(255, 255, 255, 0.62);
-      }
-
       @media (max-width: 560px) {
+        body {
+          padding: 14px 10px;
+        }
+
+        .stage {
+          width: 100%;
+        }
+
+        .card {
+          padding: 48px 20px 30px;
+          max-height: calc(100vh - 28px);
+          max-height: calc(100svh - 28px);
+        }
+
+        .script {
+          white-space: normal;
+        }
+
+        .forLine,
+        .signature,
+        .dedication {
+          line-height: 1.4;
+        }
+
+        .quoteText,
+        .screenText {
+          font-size: clamp(17px, 5vw, 22px);
+          line-height: 1.34;
+          margin-bottom: 18px;
+        }
+
+        .buttons {
+          gap: 10px;
+        }
+
+        .buttons .btn:not(.roseBtn):not(.roseChoiceBtn) {
+          width: min(280px, 100%);
+        }
+
+        .sheet {
+          padding: 22px 16px 18px;
+          border-radius: 22px;
+        }
+
+        .sheetTop {
+          flex-wrap: wrap;
+          justify-content: center;
+        }
+
+        .topActions {
+          width: 100%;
+          justify-content: center;
+        }
+
+        .dayPill {
+          white-space: normal;
+          text-align: center;
+        }
+
+        body[data-day="2"] #card.day2Final .finalText,
+        body[data-day="3"] .finalText,
+        body[data-day="4"] .finalText {
+          font-size: clamp(15px, 4.8vw, 20px);
+          line-height: 1.42;
+        }
+
+        body[data-day="3"] .sweetWish,
+        body[data-day="4"] .teddyWish {
+          font-size: clamp(22px, 7vw, 32px);
+        }
+
         body[data-day="5"] .card {
           min-height: calc(100vh - 24px);
           min-height: calc(100svh - 24px);
@@ -2269,20 +2129,47 @@
         }
 
         body[data-day="5"] .hugImageSlot {
-          width: min(420px, 100%);
-          min-height: 128px;
+          width: min(360px, 100%);
         }
 
         body[data-day="5"] .hugImageFrame {
-          border-radius: 18px;
+          border-radius: 16px;
         }
 
         body[data-day="5"] .hugChoice {
           min-width: 100%;
         }
+
+        body[data-day="5"] .hugScene[data-step="8"] .hugText {
+          max-width: 100%;
+          font-size: clamp(16px, 5vw, 21px);
+          line-height: 1.28;
+        }
+
+        body[data-day="5"] .hugScene[data-step="8"] .hugImageSlot {
+          width: min(320px, 100%);
+        }
       }
 
       @media (max-height: 760px) {
+        body {
+          padding: 10px;
+        }
+
+        .card {
+          max-height: calc(100svh - 20px);
+          padding-top: 46px;
+          padding-bottom: 24px;
+        }
+
+        .ribbon {
+          top: 12px;
+        }
+
+        .flow {
+          margin: 10px 0 14px;
+        }
+
         body[data-day="5"] .card {
           min-height: calc(100svh - 24px);
           padding-top: 14px;
@@ -2298,12 +2185,17 @@
           line-height: 1.28;
         }
 
-        body[data-day="5"] .hugImageSlot {
-          min-height: 104px;
-        }
-
         body[data-day="5"] .hugImageFrame {
           aspect-ratio: 16 / 9;
+        }
+
+        body[data-day="5"] .hugScene[data-step="8"] .hugText {
+          font-size: clamp(15px, 2.3vw, 20px);
+          line-height: 1.24;
+        }
+
+        body[data-day="5"] .hugScene[data-step="8"] .hugImageSlot {
+          width: min(300px, 100%);
         }
       }
 
@@ -2356,11 +2248,22 @@
         }
 
         body[data-day="5"] .hugScene[data-step="8"] .hugText {
-          max-width: 24ch;
+          max-width: 30ch;
+          font-size: clamp(15px, 1.7vw, 24px);
+          line-height: 1.22;
+        }
+
+        body[data-day="5"] .hugScene[data-step="8"] .hugImageSlot {
+          min-height: 0;
+          width: min(360px, 100%);
         }
       }
 
       @media (max-width: 440px) {
+        body {
+          padding: 10px 8px;
+        }
+
         body[data-day="5"] .card {
           padding: 14px 8px;
           border-radius: 20px;
@@ -2389,6 +2292,15 @@
           gap: 9px;
         }
 
+        body[data-day="5"] .hugScene[data-step="8"] .hugText {
+          max-width: 100%;
+          line-height: 1.3;
+        }
+
+        body[data-day="5"] .hugScene[data-step="8"] .hugImageSlot {
+          width: min(280px, 100%);
+        }
+
         .card {
           padding: 48px 22px 34px;
         }
@@ -2399,6 +2311,14 @@
 
         .buttons {
           gap: 12px;
+        }
+
+        .buttons .btn:not(.roseBtn):not(.roseChoiceBtn) {
+          width: 100%;
+        }
+
+        .script {
+          font-size: 1.14em;
         }
 
         .toast {
@@ -2428,11 +2348,7 @@
         .gateBtn,
         .gateBtn::before,
         .hugGateBtn,
-        .hugGateBtn::before,
-        .hugPlaceholderAura,
-        .hugPlaceholderIcon,
-        .hugPlaceholderSpark,
-        .hugImageSlot.placeholder .hugImageFrame::before {
+        .hugGateBtn::before {
           animation: none !important;
         }
 
@@ -3678,13 +3594,9 @@
               ink: "#F5F8F7",
               dark: true,
               text:
-                `Chahe tum muskurao ya chup raho,<br />
-                main tumhe hug karta.<br /><br />
-                Aisa hug jo sirf ek second ka nahi,<br />
-                balki har mushkil mein saath rehne ka ho.<br /><br />
-                Aaj paas nahi hoon...<br />
-                par mera hug, mera saath,<br />
-                tumse kabhi door nahi hoga. &#128158;<br /><br />
+                `Chahe tum muskurao ya chup raho, main tumhe hug karta.<br /><br />
+                Aisa hug jo sirf ek second ka nahi, balki har mushkil mein saath rehne ka ho.<br /><br />
+                Aaj paas nahi hoon... par mera hug, mera saath, tumse kabhi door nahi hoga. &#128158;<br /><br />
                 Happy Hug Day, meri sukoon ${finalTo}.`,
             },
           };
@@ -3701,34 +3613,23 @@
             card.classList.toggle("hugDark", dark);
           }
 
-          function renderMediaSlot(isFinal) {
-            if (isFinal) {
-              return `
-                <div class="hugImageSlot ready">
-                  <div class="hugImageFrame">
-                    <img
-                      src="${FINAL_HUG_IMAGE}"
-                      alt="Adil Khan and Sana Chauhan"
-                      class="hugFinalImage"
-                    />
-                  </div>
-                </div>
-              `;
-            }
-
+          function renderFinalMedia() {
             return `
-              <div class="hugImageSlot placeholder" aria-hidden="true">
+              <div class="hugImageSlot ready">
                 <div class="hugImageFrame">
-                  <div class="hugPlaceholderAura"></div>
-                  <div class="hugPlaceholderSpark"></div>
-                  <div class="hugPlaceholderIcon">&#129730;</div>
+                  <img
+                    src="${FINAL_HUG_IMAGE}"
+                    alt="Adil Khan and Sana Chauhan"
+                    class="hugFinalImage"
+                  />
                 </div>
-                <p class="hugImageHint">Saving space for our final hug memory</p>
               </div>
             `;
           }
 
           function renderStep() {
+            card.classList.toggle("hugFinal", step === 8);
+
             if (step === 0) {
               applyScenePalette({ bg: "#FDEDEC", ink: "#2A1D22", dark: false });
               flow.innerHTML = `
@@ -3742,7 +3643,7 @@
             } else {
               const scene = SCENES[step] || SCENES[1];
               applyScenePalette(scene);
-              const media = renderMediaSlot(step === 8);
+              const media = step === 8 ? renderFinalMedia() : "";
 
               let buttons = "";
               if (step >= 1 && step <= 6) {
