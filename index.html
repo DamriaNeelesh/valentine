@@ -385,7 +385,6 @@
 
       function applyUrlParams() {
         const params = new URLSearchParams(window.location.search);
-        const dayParam = Number.parseInt(params.get("day") || "", 10);
         const toName = sanitizeName(params.get("to") || "");
         const fromName = sanitizeName(params.get("from") || "");
 
@@ -396,10 +395,6 @@
 
         if (fromName) {
           screens[6].lines.push(`- ${fromName}`);
-        }
-
-        if (Number.isInteger(dayParam) && dayParam >= 1 && dayParam <= screens.length) {
-          current = dayParam - 1;
         }
       }
 
