@@ -241,13 +241,22 @@ export default function Page() {
         Open when you overthink
       </button>
 
-      <section className="relative isolate flex min-h-screen items-end">
+      <section className="relative isolate flex min-h-screen items-end bg-[#060b1f]">
+        <Image
+          src="/photos/1.jpg"
+          alt=""
+          fill
+          priority
+          aria-hidden
+          className="scale-105 object-cover object-center opacity-35 blur-[2px]"
+        />
         <Image
           src="/photos/1.jpg"
           alt="Our wide memory under the night sky"
           fill
           priority
-          className="object-cover object-center"
+          className="object-contain object-top sm:object-center"
+          sizes="100vw"
         />
         <div className="absolute inset-0 hero-overlay" />
 
