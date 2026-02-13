@@ -241,21 +241,13 @@ export default function Page() {
         Open when you overthink
       </button>
 
-      <section className="relative isolate flex min-h-screen items-end bg-[#060b1f]">
-        <Image
-          src="/photos/1.jpg"
-          alt=""
-          fill
-          priority
-          aria-hidden
-          className="scale-105 object-cover object-center opacity-35 blur-[2px]"
-        />
+      <section className="relative isolate flex min-h-[100svh] items-end bg-[#060b1f]">
         <Image
           src="/photos/1.jpg"
           alt="Our wide memory under the night sky"
           fill
           priority
-          className="object-contain object-top sm:object-center"
+          className="object-contain object-top md:object-center p-1 sm:p-2"
           sizes="100vw"
         />
         <div className="absolute inset-0 hero-overlay" />
@@ -298,9 +290,22 @@ export default function Page() {
 
       <section className="mx-auto w-full max-w-5xl px-6 pb-16">
         <div className="fade-in grid gap-8 overflow-hidden rounded-3xl border border-amber-100/20 bg-slate-900/60 p-5 shadow-soft backdrop-blur md:grid-cols-[1.1fr_1fr] md:p-7">
-          <div className="relative min-h-[320px] overflow-hidden rounded-2xl">
-            <Image src="/photos/2.jpg" alt="Our together memory, close and calm" fill className="object-cover" />
-            <div className="absolute inset-0 bg-gradient-to-t from-slate-950/[0.55] to-transparent" />
+          <div className="relative min-h-[320px] overflow-hidden rounded-2xl bg-slate-950/[0.55]">
+            <Image
+              src="/photos/2.jpg"
+              alt=""
+              fill
+              aria-hidden
+              className="scale-105 object-cover object-center opacity-35 blur-[2px]"
+            />
+            <Image
+              src="/photos/2.jpg"
+              alt="Our together memory, close and calm"
+              fill
+              className="object-contain object-center p-2"
+              sizes="(max-width: 768px) 100vw, 50vw"
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-slate-950/[0.38] to-transparent" />
           </div>
           <div className="flex flex-col justify-center">
             <p className="text-xs uppercase tracking-[0.35em] text-amber-200/80">Memory Anchor</p>
@@ -357,9 +362,22 @@ export default function Page() {
         >
           {isGameWon ? (
             <div className="grid gap-8 md:grid-cols-[1fr_1.1fr]">
-              <div className="relative min-h-[360px] overflow-hidden rounded-2xl ring-1 ring-amber-200/40 shadow-[0_0_45px_rgba(242,200,121,0.2)]">
-                <Image src="/photos/3.jpg" alt="Our closest memory, intimate and warm" fill className="object-cover" />
-                <div className="absolute inset-0 bg-gradient-to-t from-slate-950/[0.65] via-transparent to-transparent" />
+              <div className="relative min-h-[360px] overflow-hidden rounded-2xl bg-slate-950/[0.55] ring-1 ring-amber-200/40 shadow-[0_0_45px_rgba(242,200,121,0.2)]">
+                <Image
+                  src="/photos/3.jpg"
+                  alt=""
+                  fill
+                  aria-hidden
+                  className="scale-105 object-cover object-center opacity-35 blur-[2px]"
+                />
+                <Image
+                  src="/photos/3.jpg"
+                  alt="Our closest memory, intimate and warm"
+                  fill
+                  className="object-contain object-center p-2"
+                  sizes="(max-width: 768px) 100vw, 50vw"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-slate-950/[0.45] via-transparent to-transparent" />
               </div>
 
               <div className="flex flex-col justify-center">
