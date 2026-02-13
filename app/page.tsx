@@ -42,6 +42,9 @@ const DAILY_MESSAGES = [
   "Main tumhe choose karta tha, karta hoon, karta rahunga.",
 ];
 
+const IST_TIMEZONE = "Asia/Kolkata";
+const DAY_MS = 86_400_000;
+
 const OPEN_WHEN_COPY: Record<Exclude<OpenWhenKey, null>, { title: string; body: string }> = {
   miss: {
     title: "Open when you miss me",
@@ -57,16 +60,32 @@ const OPEN_WHEN_COPY: Record<Exclude<OpenWhenKey, null>, { title: string; body: 
   },
 };
 
-function toLocalDateString(date: Date) {
-  const year = date.getFullYear();
-  const month = String(date.getMonth() + 1).padStart(2, "0");
-  const day = String(date.getDate()).padStart(2, "0");
+function getIstDateKey(date: Date) {
+  const parts = new Intl.DateTimeFormat("en-CA", {
+    timeZone: IST_TIMEZONE,
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+  }).formatToParts(date);
+
+  const year = parts.find((part) => part.type === "year")?.value;
+  const month = parts.find((part) => part.type === "month")?.value;
+  const day = parts.find((part) => part.type === "day")?.value;
+
+  if (!year || !month || !day) {
+    return "1970-01-01";
+  }
+
   return `${year}-${month}-${day}`;
 }
 
-function dayDiff(from: Date, to: Date) {
-  const ms = to.getTime() - from.getTime();
-  return Math.round(ms / 86_400_000);
+function getDaySerial(dateKey: string) {
+  const [year, month, day] = dateKey.split("-").map(Number);
+  return Math.floor(Date.UTC(year, month - 1, day) / DAY_MS);
+}
+
+function dayDiff(fromDateKey: string, toDateKey: string) {
+  return getDaySerial(toDateKey) - getDaySerial(fromDateKey);
 }
 
 export default function Page() {
@@ -122,13 +141,10 @@ export default function Page() {
   }, [moveNoButton]);
 
   useEffect(() => {
-    const today = new Date();
-    const midnightToday = new Date(today.getFullYear(), today.getMonth(), today.getDate());
-    const todayKey = toLocalDateString(midnightToday);
+    const todayKey = getIstDateKey(new Date());
 
     const messageIndex =
-      ((Math.floor(midnightToday.getTime() / 86_400_000) % DAILY_MESSAGES.length) + DAILY_MESSAGES.length) %
-      DAILY_MESSAGES.length;
+      ((getDaySerial(todayKey) % DAILY_MESSAGES.length) + DAILY_MESSAGES.length) % DAILY_MESSAGES.length;
     setTodayMessage(DAILY_MESSAGES[messageIndex]);
 
     const savedLastDate = localStorage.getItem("valentine_last_seen");
@@ -137,8 +153,7 @@ export default function Page() {
     let nextStreak = 1;
 
     if (savedLastDate) {
-      const lastDate = new Date(`${savedLastDate}T00:00:00`);
-      const gap = dayDiff(lastDate, midnightToday);
+      const gap = dayDiff(savedLastDate, todayKey);
 
       if (gap === 0) {
         nextStreak = savedStreak > 0 ? savedStreak : 1;
