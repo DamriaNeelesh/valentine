@@ -1,0 +1,512 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Kiss Day - Ek Narm Sa Iqraar</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700&family=Sora:wght@400;500;600&display=swap"
+      rel="stylesheet"
+    />
+
+    <style>
+      :root {
+        --screen-bg: #fdedec;
+        --screen-text: #2f1b21;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      html,
+      body {
+        height: 100%;
+      }
+
+      body {
+        margin: 0;
+        padding: 18px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-family: "Sora", ui-sans-serif, system-ui, -apple-system, "Segoe UI",
+          sans-serif;
+        color: var(--screen-text);
+        background: var(--screen-bg);
+        transition: background-color 420ms ease;
+        overflow: hidden;
+      }
+
+      body::before {
+        content: "";
+        position: fixed;
+        inset: -30vmax;
+        background:
+          radial-gradient(circle at 16% 20%, rgba(255, 255, 255, 0.74), transparent 40%),
+          radial-gradient(circle at 84% 0%, rgba(255, 255, 255, 0.35), transparent 36%),
+          radial-gradient(circle at 50% 100%, rgba(0, 0, 0, 0.08), transparent 40%);
+        pointer-events: none;
+      }
+
+      .card {
+        position: relative;
+        width: min(92vw, 440px);
+        max-height: calc(100dvh - 28px);
+        border-radius: 28px;
+        overflow: hidden;
+        backdrop-filter: blur(4px);
+        background: rgba(255, 255, 255, 0.7);
+        box-shadow: 0 24px 55px rgba(0, 0, 0, 0.14);
+        border: 1px solid rgba(255, 255, 255, 0.35);
+      }
+
+      body.night .card {
+        background: rgba(12, 12, 12, 0.5);
+        border-color: rgba(255, 255, 255, 0.14);
+        box-shadow: 0 24px 55px rgba(0, 0, 0, 0.42);
+      }
+
+      .image-wrap {
+        width: 100%;
+        aspect-ratio: 4 / 3;
+        background: rgba(0, 0, 0, 0.08);
+      }
+
+      .image-wrap img {
+        display: block;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+
+      .content {
+        padding: 18px 20px 24px;
+        text-align: center;
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+        color: var(--screen-text);
+        opacity: 1;
+        transform: translateY(0);
+        transition: opacity 220ms ease, transform 220ms ease;
+      }
+
+      .content.animating {
+        opacity: 0;
+        transform: translateY(8px);
+      }
+
+      .hero-emoji {
+        width: 100%;
+        text-align: center;
+        font-size: clamp(2rem, 9vw, 2.8rem);
+        line-height: 1;
+        margin-top: 2px;
+      }
+
+      .lines {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+      }
+
+      .line {
+        margin: 0;
+        font-size: clamp(1rem, 4vw, 1.08rem);
+        line-height: 1.58;
+        font-weight: 500;
+      }
+
+      .line.strong {
+        font-family: "Fraunces", Georgia, serif;
+        font-size: clamp(1.16rem, 4.8vw, 1.3rem);
+        font-weight: 700;
+      }
+
+      .line.gap {
+        line-height: 0.2;
+        opacity: 0;
+      }
+
+      .controls {
+        margin-top: 2px;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+      }
+
+      button {
+        border: 0;
+        border-radius: 999px;
+        padding: 12px 16px;
+        font-size: 0.98rem;
+        font-weight: 600;
+        letter-spacing: 0.01em;
+        cursor: pointer;
+        color: #2a171d;
+        background: rgba(255, 255, 255, 0.94);
+        box-shadow: 0 10px 24px rgba(0, 0, 0, 0.13);
+        transition: transform 160ms ease, box-shadow 160ms ease,
+          background-color 160ms ease;
+      }
+
+      button:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 12px 28px rgba(0, 0, 0, 0.18);
+      }
+
+      button:active {
+        transform: translateY(0);
+      }
+
+      button:focus-visible {
+        outline: 2px solid rgba(10, 10, 10, 0.55);
+        outline-offset: 2px;
+      }
+
+      body.night button {
+        color: #131313;
+        background: #fbfbfb;
+      }
+
+      .choices {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+      }
+
+      .choice-btn {
+        width: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+      }
+
+      .choice-text {
+        display: inline-block;
+      }
+
+      .dots {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 7px;
+        margin: 12px 0 16px;
+      }
+
+      .dot {
+        width: 7px;
+        height: 7px;
+        border-radius: 999px;
+        background: rgba(60, 40, 50, 0.25);
+        transition: transform 180ms ease, background-color 180ms ease;
+      }
+
+      .dot.active {
+        transform: scale(1.4);
+        background: rgba(34, 23, 27, 0.92);
+      }
+
+      body.night .dot {
+        background: rgba(255, 255, 255, 0.34);
+      }
+
+      body.night .dot.active {
+        background: rgba(255, 255, 255, 0.95);
+      }
+
+      @media (max-width: 420px) {
+        body {
+          padding: 12px;
+        }
+
+        .card {
+          width: 100%;
+          max-height: calc(100dvh - 20px);
+          border-radius: 24px;
+        }
+
+        .content {
+          padding: 16px 16px 20px;
+          gap: 10px;
+        }
+
+        button {
+          padding: 11px 14px;
+          font-size: 0.95rem;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <main class="card" aria-live="polite">
+      <div class="image-wrap">
+        <img id="screenImage" src="screen1.jpeg" alt="Kiss Day screen" />
+      </div>
+
+      <section id="content" class="content">
+        <div id="heroEmoji" class="hero-emoji" aria-hidden="true">&#x1F48B;</div>
+        <div id="lines" class="lines"></div>
+
+        <div id="controls" class="controls">
+          <div id="choices" class="choices" hidden></div>
+          <button id="nextBtn" type="button">Aage</button>
+        </div>
+      </section>
+
+      <div id="dots" class="dots" aria-label="Screen progress"></div>
+    </main>
+
+    <script>
+      const EMOJI = {
+        kiss: "\u{1F48B}",
+        blossom: "\u{1F338}",
+        moon: "\u{1F319}",
+        whiteHeart: "\u{1F90D}",
+        leaf: "\u{1F33F}",
+        sparkles: "\u2728",
+        rose: "\u{1F339}",
+        hearts: "\u{1F49E}",
+      };
+
+      const screens = [
+        {
+          bg: "#FDEDEC",
+          textColor: "#2f1b21",
+          emoji: EMOJI.kiss,
+          image: "screen1.jpeg",
+          lines: [
+            "Aaj Kiss Day hai…",
+            "aur main bas ek pyaar bhara ehsaas tum tak bhejna chahta hoon.",
+          ],
+          button: "Aage",
+        },
+        {
+          bg: "#FFF6E5",
+          textColor: "#3a2b1f",
+          emoji: EMOJI.blossom,
+          image: "screen2.jpeg",
+          lines: [
+            "Kiss sirf ek moment nahi hota…",
+            "kabhi kabhi woh chup si tasalli hoti hai.",
+          ],
+          button: "Continue",
+        },
+        {
+          bg: "#ECE7F2",
+          textColor: "#2d2338",
+          emoji: EMOJI.moon,
+          image: "screen3.jpeg",
+          lines: [
+            "Jab tum chup rehti ho,",
+            "par dil mein sab mehsoos karti ho…",
+          ],
+          button: "Aage",
+        },
+        {
+          bg: "#EAF4F8",
+          textColor: "#20323a",
+          emoji: EMOJI.whiteHeart,
+          image: "screen4.jpeg",
+          lines: [
+            "Us waqt main chahta hoon",
+            "tumhe itna mehfooz feel karaun",
+            "ki tumhe kuch kehne ki zarurat hi na pade.",
+          ],
+          button: "Tight Hold",
+        },
+        {
+          bg: "#1C1C1C",
+          textColor: "#f7f7f7",
+          emoji: EMOJI.leaf,
+          image: "screen5.jpeg",
+          lines: [
+            "Aaj door hoon…",
+            "par mera ehsaas tumhare itna kareeb hai",
+            "jitna ek narm sa kiss.",
+          ],
+          button: "Continue",
+          night: true,
+        },
+        {
+          bg: "#FADBD8",
+          textColor: "#352125",
+          emoji: EMOJI.sparkles,
+          image: "screen6.jpeg",
+          lines: [
+            "Agar main abhi tumhare saamne hota…",
+            "aur dheere se tumhare paas aata…",
+            "Tum kya karti?",
+          ],
+          options: [
+            `Nazrein jhuka leti aur sharma jaati ${EMOJI.blossom}`,
+            `Dheere se aankhein band kar leti ${EMOJI.whiteHeart}`,
+            `Muskura ke thoda sa paas aa jaati ${EMOJI.hearts}`,
+          ],
+        },
+        {
+          bg: "#0F2A24",
+          textColor: "#eef8f5",
+          emoji: EMOJI.rose,
+          image: "screen7.jpeg",
+          lines: [
+            "Yeh kiss sirf ek lamha nahi…",
+            "ek vaada hai.",
+            "",
+            "Tum meri mohabbat nahi sirf,",
+            "meri rahat ho.",
+            "",
+            "Door sahi…",
+            "par dil se tumhe mehfooz rakhne ka irada hamesha rahega.",
+            "",
+            `Happy Kiss Day, meri sukoon. ${EMOJI.kiss}${EMOJI.whiteHeart}`,
+          ],
+          strongLines: [0, 9],
+          night: true,
+          final: true,
+        },
+      ];
+
+      let current = 0;
+
+      function sanitizeName(value) {
+        if (!value) return "";
+        return value
+          .replace(/[<>{}`]/g, "")
+          .replace(/\s+/g, " ")
+          .trim()
+          .slice(0, 48);
+      }
+
+      function applyUrlParams() {
+        const params = new URLSearchParams(window.location.search);
+        const toName = sanitizeName(params.get("to") || "");
+        const fromName = sanitizeName(params.get("from") || "");
+
+        if (toName) {
+          screens[0].lines[1] = `aur main bas ek pyaar bhara ehsaas ${toName} tak bhejna chahta hoon.`;
+          screens[6].lines[9] = `Happy Kiss Day, ${toName}. ${EMOJI.kiss}${EMOJI.whiteHeart}`;
+        }
+
+        if (fromName) {
+          screens[6].lines.push(`- ${fromName}`);
+        }
+      }
+
+      const body = document.body;
+      const content = document.getElementById("content");
+      const screenImage = document.getElementById("screenImage");
+      const heroEmoji = document.getElementById("heroEmoji");
+      const linesEl = document.getElementById("lines");
+      const choicesEl = document.getElementById("choices");
+      const nextBtn = document.getElementById("nextBtn");
+      const dotsEl = document.getElementById("dots");
+
+      function buildDots() {
+        dotsEl.innerHTML = "";
+        screens.forEach((_, index) => {
+          const dot = document.createElement("span");
+          dot.className = "dot";
+          if (index === current) dot.classList.add("active");
+          dotsEl.appendChild(dot);
+        });
+      }
+
+      function buildLines(screen) {
+        linesEl.innerHTML = "";
+
+        screen.lines.forEach((text, index) => {
+          const p = document.createElement("p");
+          p.className = "line";
+
+          if (!text) {
+            p.classList.add("gap");
+            p.innerHTML = "&nbsp;";
+          } else {
+            p.textContent = text;
+          }
+
+          if (Array.isArray(screen.strongLines) && screen.strongLines.includes(index)) {
+            p.classList.add("strong");
+          }
+
+          linesEl.appendChild(p);
+        });
+      }
+
+      function goToScreen(next) {
+        content.classList.add("animating");
+
+        window.setTimeout(() => {
+          current = next;
+          render();
+          content.classList.remove("animating");
+        }, 180);
+      }
+
+      function renderChoices(screen) {
+        choicesEl.innerHTML = "";
+
+        if (!Array.isArray(screen.options)) {
+          choicesEl.hidden = true;
+          return;
+        }
+
+        screen.options.forEach((label) => {
+          const button = document.createElement("button");
+          button.type = "button";
+          button.className = "choice-btn";
+
+          const span = document.createElement("span");
+          span.className = "choice-text";
+          span.textContent = label;
+
+          button.appendChild(span);
+          button.addEventListener("click", () => goToScreen(screens.length - 1));
+          choicesEl.appendChild(button);
+        });
+
+        choicesEl.hidden = false;
+      }
+
+      function render() {
+        const screen = screens[current];
+
+        body.style.setProperty("--screen-bg", screen.bg);
+        body.style.setProperty("--screen-text", screen.textColor);
+        body.classList.toggle("night", !!screen.night);
+
+        screenImage.src = screen.image;
+        screenImage.alt = `Kiss Day screen ${current + 1}`;
+
+        heroEmoji.textContent = screen.emoji;
+        buildLines(screen);
+        renderChoices(screen);
+        buildDots();
+
+        if (screen.final || screen.options) {
+          nextBtn.hidden = true;
+        } else {
+          nextBtn.hidden = false;
+          nextBtn.textContent = screen.button || "Continue";
+        }
+      }
+
+      nextBtn.addEventListener("click", () => {
+        if (current < screens.length - 1) {
+          goToScreen(current + 1);
+        }
+      });
+
+      applyUrlParams();
+      render();
+    </script>
+  </body>
+</html>
+
+
