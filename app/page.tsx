@@ -233,14 +233,6 @@ export default function Page() {
         </div>
       )}
 
-      <button
-        type="button"
-        onClick={() => setOpenWhenModal("overthink")}
-        className="fixed bottom-5 right-5 z-40 rounded-full border border-white/25 bg-slate-950/75 px-4 py-3 text-sm font-semibold tracking-wide text-amber-100 shadow-[0_10px_30px_rgba(0,0,0,0.35)] backdrop-blur-md transition hover:border-amber-200/60 hover:bg-slate-900/90"
-      >
-        Open when you overthink
-      </button>
-
       <section className="relative isolate flex min-h-[100svh] items-end bg-[#060b1f]">
         <Image
           src="/photos/1.jpg"
