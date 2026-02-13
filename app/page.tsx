@@ -267,7 +267,7 @@ export default function Page() {
             <button
               type="button"
               onClick={() => setOpenWhenModal("miss")}
-              className="tap-btn border border-white/35 bg-white/10 text-white backdrop-blur"
+              className="tap-btn border border-white/[0.35] bg-white/10 text-white backdrop-blur"
             >
               Open when you miss me
             </button>
@@ -276,7 +276,7 @@ export default function Page() {
       </section>
 
       <section className="mx-auto w-full max-w-5xl px-6 py-16">
-        <div className="fade-in rounded-3xl border border-white/12 bg-slate-900/55 p-7 shadow-soft backdrop-blur-md sm:p-10">
+        <div className="fade-in rounded-3xl border border-white/[0.12] bg-slate-900/[0.55] p-7 shadow-soft backdrop-blur-md sm:p-10">
           <h2 className="font-heading text-4xl text-amber-100">Ek seedhi baat</h2>
           <p className="mt-5 text-base leading-8 text-slate-100/95 sm:text-lg">
             Mujhe pata hai kabhi-kabhi tum apni feelings chupaa leti ho. Kabhi yeh darr bhi aata hoga ki shayad main chala
@@ -291,7 +291,7 @@ export default function Page() {
         <div className="fade-in grid gap-8 overflow-hidden rounded-3xl border border-amber-100/20 bg-slate-900/60 p-5 shadow-soft backdrop-blur md:grid-cols-[1.1fr_1fr] md:p-7">
           <div className="relative min-h-[320px] overflow-hidden rounded-2xl">
             <Image src="/photos/2.jpg" alt="Our together memory, close and calm" fill className="object-cover" />
-            <div className="absolute inset-0 bg-gradient-to-t from-slate-950/55 to-transparent" />
+            <div className="absolute inset-0 bg-gradient-to-t from-slate-950/[0.55] to-transparent" />
           </div>
           <div className="flex flex-col justify-center">
             <p className="text-xs uppercase tracking-[0.35em] text-amber-200/80">Memory Anchor</p>
@@ -302,11 +302,11 @@ export default function Page() {
       </section>
 
       <section className="mx-auto w-full max-w-5xl px-6 pb-16">
-        <div className="fade-in rounded-3xl border border-white/12 bg-slate-900/58 p-7 shadow-soft backdrop-blur-md sm:p-10">
+        <div className="fade-in rounded-3xl border border-white/[0.12] bg-slate-900/[0.58] p-7 shadow-soft backdrop-blur-md sm:p-10">
           <h2 className="font-heading text-4xl text-amber-100">Ek chhota sa sawaal</h2>
           <p className="mt-4 text-lg text-slate-100/95">Kya tum mujhe apna safe place maanogi?</p>
 
-          <div ref={noZoneRef} className="relative mt-8 h-48 overflow-hidden rounded-2xl border border-white/10 bg-slate-950/55 p-4 sm:h-56">
+          <div ref={noZoneRef} className="relative mt-8 h-48 overflow-hidden rounded-2xl border border-white/10 bg-slate-950/[0.55] p-4 sm:h-56">
             <button
               type="button"
               onClick={onYesClick}
@@ -342,7 +342,7 @@ export default function Page() {
 
       <section className="mx-auto w-full max-w-5xl px-6 pb-16">
         <div
-          className={`rounded-3xl border border-amber-100/22 bg-slate-900/60 p-5 shadow-soft backdrop-blur-md transition duration-700 sm:p-8 ${
+          className={`rounded-3xl border border-amber-100/[0.22] bg-slate-900/60 p-5 shadow-soft backdrop-blur-md transition duration-700 sm:p-8 ${
             isGameWon ? "translate-y-0 opacity-100" : "pointer-events-none translate-y-2 opacity-45 blur-[1px]"
           }`}
         >
@@ -350,7 +350,7 @@ export default function Page() {
             <div className="grid gap-8 md:grid-cols-[1fr_1.1fr]">
               <div className="relative min-h-[360px] overflow-hidden rounded-2xl ring-1 ring-amber-200/40 shadow-[0_0_45px_rgba(242,200,121,0.2)]">
                 <Image src="/photos/3.jpg" alt="Our closest memory, intimate and warm" fill className="object-cover" />
-                <div className="absolute inset-0 bg-gradient-to-t from-slate-950/65 via-transparent to-transparent" />
+                <div className="absolute inset-0 bg-gradient-to-t from-slate-950/[0.65] via-transparent to-transparent" />
               </div>
 
               <div className="flex flex-col justify-center">
@@ -362,18 +362,18 @@ export default function Page() {
               </div>
             </div>
           ) : (
-            <div className="py-10 text-center text-slate-200/85">
+            <div className="py-10 text-center text-slate-200/[0.85]">
               <p className="text-xl font-medium">Photo reveal locked.</p>
-              <p className="mt-2">Pehle "Haan" dabao. Main wahi hoon, wait karta hua.</p>
+              <p className="mt-2">Pehle &quot;Haan&quot; dabao. Main wahi hoon, wait karta hua.</p>
             </div>
           )}
         </div>
       </section>
 
       <section className="mx-auto w-full max-w-5xl px-6 pb-16">
-        <div className="fade-in rounded-3xl border border-white/12 bg-slate-900/58 p-7 shadow-soft backdrop-blur-md sm:p-10">
+        <div className="fade-in rounded-3xl border border-white/[0.12] bg-slate-900/[0.58] p-7 shadow-soft backdrop-blur-md sm:p-10">
           <h2 className="font-heading text-4xl text-amber-100">Aaj ka message</h2>
-          <p className="mt-5 rounded-2xl border border-amber-100/20 bg-slate-950/55 p-5 text-lg leading-relaxed text-slate-100">
+          <p className="mt-5 rounded-2xl border border-amber-100/20 bg-slate-950/[0.55] p-5 text-lg leading-relaxed text-slate-100">
             {todayMessage}
           </p>
 
@@ -409,18 +409,18 @@ export default function Page() {
         <p className="font-heading text-4xl leading-tight text-amber-50 sm:text-5xl">Main tumhe sirf aaj ke liye nahi chahta.</p>
         <p className="mt-4 font-heading text-4xl leading-tight text-amber-50 sm:text-5xl">Main tumhe har kal ke liye chahta hoon.</p>
         <p className="mt-4 text-2xl tracking-wide text-amber-100">Aaj bhi. Kal bhi. Hamesha.</p>
-        <p className="mt-10 text-xs uppercase tracking-[0.3em] text-slate-300/85">Come back tomorrow. I&apos;ll be here.</p>
+        <p className="mt-10 text-xs uppercase tracking-[0.3em] text-slate-300/[0.85]">Come back tomorrow. I&apos;ll be here.</p>
       </section>
 
       {activeModal && (
         <div className="fixed inset-0 z-[60] flex items-end justify-center bg-slate-950/80 p-4 backdrop-blur-sm sm:items-center">
-          <div className="w-full max-w-md rounded-3xl border border-white/14 bg-slate-900/92 p-6 shadow-[0_14px_45px_rgba(0,0,0,0.45)]">
+          <div className="w-full max-w-md rounded-3xl border border-white/[0.14] bg-slate-900/[0.92] p-6 shadow-[0_14px_45px_rgba(0,0,0,0.45)]">
             <p className="text-xs uppercase tracking-[0.32em] text-amber-200/80">Safe Space</p>
             <h3 className="mt-3 font-heading text-3xl text-amber-100">{activeModal.title}</h3>
             <p className="mt-4 text-base leading-7 text-slate-100/95">{activeModal.body}</p>
 
-            <div className="mt-5 rounded-2xl border border-white/12 bg-slate-950/55 p-4 text-sm leading-6 text-slate-200/95">
-              4 deep breaths lo. Paani ka ek sip lo. Aur yeh line bolo: "Main safe hoon, main loved hoon, main chosen hoon."
+            <div className="mt-5 rounded-2xl border border-white/[0.12] bg-slate-950/[0.55] p-4 text-sm leading-6 text-slate-200/95">
+              4 deep breaths lo. Paani ka ek sip lo. Aur yeh line bolo: &quot;Main safe hoon, main loved hoon, main chosen hoon.&quot;
             </div>
 
             <button
